@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-coscientist"
+version = "0.1.0"
+description = "AI Co-Scientist — Layer 1 (Deep Research Engine) and Layer 2 (Human-in-the-Loop reasoning)."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "langgraph>=0.2.50",
+    "langchain>=0.3.0",
+    "langchain-core>=0.3.0",
+    "langgraph-checkpoint-sqlite>=2.0.0",
+    "pydantic>=2.7.0",
+    "pydantic-settings>=2.3.0",
+    "networkx>=3.2",
+    "httpx>=0.27.0",
+    "python-dotenv>=1.0.1",
+    "rich>=13.7.0",
+]
+
+[project.optional-dependencies]
+openai = ["langchain-openai>=0.2.0"]
+anthropic = ["langchain-anthropic>=0.2.0"]
+
+[project.scripts]
+aicoscientist = "aicoscientist.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
