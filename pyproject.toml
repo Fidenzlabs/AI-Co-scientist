@@ -12,6 +12,8 @@ dependencies = [
     "langgraph>=0.2.50",
     "langchain>=0.3.0",
     "langchain-core>=0.3.0",
+    "langchain-google-genai>=2.0.0",
+    "langchain-google-vertexai>=2.0.0",
     "langgraph-checkpoint-sqlite>=2.0.0",
     "pydantic>=2.7.0",
     "pydantic-settings>=2.3.0",
@@ -26,9 +28,16 @@ dependencies = [
 [project.optional-dependencies]
 openai = ["langchain-openai>=0.2.0"]
 anthropic = ["langchain-anthropic>=0.2.0"]
+# Google Gemini via AI Studio API keys (LLM_PROVIDER=google_genai)
+google-genai = ["langchain-google-genai>=2.0.0"]
+# Google Gemini via Vertex AI / service account (LLM_PROVIDER=google_vertexai)
+google-vertexai = ["langchain-google-vertexai>=2.0.0"]
 # Tier-1 foundation-MLIP surface reactivity (Colab CUDA or CPU). MACE energy
 # differences require float64, unsupported on Apple MPS -> run this tier on CPU/CUDA.
 mlip = ["ase>=3.23", "mace-torch>=0.3.6"]
+# Realistic structures: rdkit builds real 3D molecules from SMILES; pymatgen
+# generates crystalline-derived slabs (alpha-quartz SiO2, beta-Si3N4).
+structures = ["rdkit>=2024.03.1", "pymatgen>=2024.0.0"]
 # Tier-2 semi-empirical spot-checks for calibration.
 xtb = ["tblite>=0.3.0"]
 

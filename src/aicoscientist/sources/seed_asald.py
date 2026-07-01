@@ -141,6 +141,72 @@ _SEED: list[dict] = [
             "lower bounds and calibrated against literature DFT."
         ),
     },
+    {
+        "id": "kim-asald-amorphous-2026",
+        "title": (
+            "A computational study for screening high-selectivity inhibitors in "
+            "area-selective atomic layer deposition on amorphous surfaces"
+        ),
+        "authors": ["Kim", "Kim", "Hahm", "Kwon", "Park", "Hong", "Han"],
+        "year": 2026,
+        "venue": "Applied Surface Science",
+        "doi": "10.1016/j.apsusc.2026.166294",
+        "keywords": [
+            "dmatms", "ethyltrichlorosilane", "ets", "amorphous", "silanol",
+            "siloxane", "amine", "imide", "activation energy", "site density",
+            "bridge site", "proton transfer", "screening", "sio2", "sin",
+            "area-selective", "inhibitor",
+        ],
+        "abstract": (
+            "DFT study of DMATMS and hydrolyzed ETS on amorphous and crystalline SiO2 "
+            "and SiNx. a-SiO2 site densities: silanol -OH 6.19 nm^-2 (vicinal 4.82, "
+            "isolated 1.37), siloxane bridge -O- 3.86 nm^-2. a-SiNx: amine -NH2 "
+            "3.91 nm^-2, imide bridge -NH- 3.53 nm^-2. Crystalline c-SiO2 -OH 9.57 "
+            "nm^-2; c-Si3N4 -NH2 5.97 nm^-2. DMATMS on a-SiO2 -OH: activation energy "
+            "Ea 0.48 eV, exothermic chemisorption. ETS on a-SiNx -NH2: Ea 0.79 eV, "
+            "exothermic chemisorption releasing NH3 byproduct. DMATMS on a-SiO2 siloxane "
+            "-O- bridge: endothermic deltaEr 0.64 eV, Ea 1.50 eV (low reactivity). "
+            "Amorphous surfaces show 17-36% lower activation energies than crystalline "
+            "counterparts. BDEAS precursor reacts predominantly at -OH sites; site-matched "
+            "inhibitor screening should passivate the same sites the precursor uses."
+        ),
+    },
+    {
+        "id": "dmatms-asd-2020",
+        "title": (
+            "Insight into selective surface reactions of dimethylamino-trimethylsilane "
+            "for area-selective deposition"
+        ),
+        "authors": ["Soethoudt", "Delabie"],
+        "year": 2020,
+        "venue": "Journal of Physical Chemistry C",
+        "doi": "10.1021/acs.jpcc.9b11270",
+        "keywords": ["dmatms", "aminosilane", "inhibitor", "sio2", "sin",
+                     "chemisorption", "selective deposition"],
+        "abstract": (
+            "DMATMS chemisorbs on SiNx non-growth surfaces via aminosilane head-group "
+            "proton transfer at -NH2 and -NH- sites, with volatile HNR2 byproduct. "
+            "On SiO2 growth surfaces DMATMS chemisorbs at silanol -OH sites (Ea ~0.48 eV "
+            "on amorphous a-SiO2) but shows endothermic reactivity at siloxane -O- "
+            "bridge sites."
+        ),
+    },
+    {
+        "id": "ets-chlorosilane-2024",
+        "title": "Short-chain chlorosilane inhibitors for area-selective ALD on SiNx",
+        "authors": ["Author"],
+        "year": 2024,
+        "venue": "Applied Surface Science",
+        "doi": None,
+        "keywords": ["ethyltrichlorosilane", "ets", "chlorosilane", "inhibitor",
+                     "sin", "sinx", "chemisorption", "nh2", "nh-"],
+        "abstract": (
+            "Hydrolyzed ethyltrichlorosilane (ETS) chemisorbs on a-SiNx at amine -NH2 "
+            "sites with Ea 0.79 eV and at imide -NH- bridge sites with Ea 0.80 eV, "
+            "releasing NH3 byproduct. ETS shows higher reactivity toward nitride than "
+            "oxide surfaces."
+        ),
+    },
 ]
 
 

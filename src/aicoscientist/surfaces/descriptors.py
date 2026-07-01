@@ -11,6 +11,14 @@ from __future__ import annotations
 
 import numpy as np
 
+# Physical acceptance bands for the descriptor gate (loose; catch pathological slabs).
+#   mean_coordination: near-tetrahedral bulk + under-coordinated surface -> ~2.5-4.5.
+#   min_interatomic_distance: below this = atomic overlap (unphysical).
+DESCRIPTOR_BANDS: dict[str, dict] = {
+    "SiO2": {"mean_coordination": (2.3, 4.6), "min_distance_A": 0.75},
+    "SiN": {"mean_coordination": (2.3, 4.8), "min_distance_A": 0.75},
+}
+
 
 def coordination_numbers(atoms, rcut: float = 2.0) -> dict:
     """Mean nearest-neighbor coordination within ``rcut`` (Angstrom)."""
@@ -26,6 +34,45 @@ def coordination_numbers(atoms, rcut: float = 2.0) -> dict:
         "min_coordination": int(min(coords)) if coords else 0,
         "max_coordination": int(max(coords)) if coords else 0,
     }
+
+
+def min_interatomic_distance(atoms) -> float:
+    """Smallest interatomic distance (Angstrom); a physical-sanity / overlap check."""
+    if len(atoms) < 2:
+        return 0.0
+    d = atoms.get_all_distances(mic=True)
+    np.fill_diagonal(d, np.inf)
+    return round(float(d.min()), 3)
+
+
+def rdf_first_peak(atoms, rmax: float = 3.0, nbins: int = 60) -> float:
+    """Position (Angstrom) of the first radial-distribution-function peak."""
+    if len(atoms) < 2:
+        return 0.0
+    d = atoms.get_all_distances(mic=True)
+    vals = d[np.triu_indices(len(atoms), k=1)]
+    vals = vals[vals < rmax]
+    if vals.size == 0:
+        return 0.0
+    hist, edges = np.histogram(vals, bins=nbins, range=(0.0, rmax))
+    centers = 0.5 * (edges[:-1] + edges[1:])
+    return round(float(centers[int(np.argmax(hist))]), 3)
+
+
+def descriptors_physical(desc: dict, material_key: str) -> tuple[bool, list[str]]:
+    """Check descriptors against :data:`DESCRIPTOR_BANDS`; return (ok, reasons)."""
+    band = DESCRIPTOR_BANDS.get(material_key)
+    if not band:
+        return True, []
+    reasons: list[str] = []
+    lo, hi = band["mean_coordination"]
+    mc = desc.get("mean_coordination")
+    if mc is not None and not (lo <= mc <= hi):
+        reasons.append(f"mean_coordination {mc} outside [{lo}, {hi}]")
+    md = desc.get("min_distance_A")
+    if md is not None and md < band["min_distance_A"]:
+        reasons.append(f"atomic overlap: min_distance {md} < {band['min_distance_A']}")
+    return (len(reasons) == 0), reasons
 
 
 def roughness(atoms) -> float:
@@ -46,6 +93,14 @@ def describe(atoms) -> dict:
         pass
     try:
         out["roughness_A"] = roughness(atoms)
+    except Exception:  # noqa: BLE001
+        pass
+    try:
+        out["min_distance_A"] = min_interatomic_distance(atoms)
+    except Exception:  # noqa: BLE001
+        pass
+    try:
+        out["rdf_first_peak_A"] = rdf_first_peak(atoms)
     except Exception:  # noqa: BLE001
         pass
     out["n_atoms"] = len(atoms)

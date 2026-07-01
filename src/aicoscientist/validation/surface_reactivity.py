@@ -34,7 +34,40 @@ from .selectivity_model import (
     SelectivityModel,
     blocking_coverage_from_dE,
     coverage_from_dE,
+    site_fractions_from_densities,
+    site_reactivity,
+    site_resolved_blocking,
 )
+
+# Kim et al. 2026 built-in site-resolved priors (deltaEr, Ea in eV).
+_BUILTIN_SITE_PRIORS: dict[str, dict[str, dict[str, dict]]] = {
+    "dmatms": {
+        "SiO2": {
+            "OH": {"deltaEr_eV": -0.85, "Ea_eV": 0.48},
+            "O_bridge": {"deltaEr_eV": 0.64, "Ea_eV": 1.50},
+        },
+        "SiN": {
+            "NH2": {"deltaEr_eV": -0.80, "Ea_eV": 1.34},
+            "NH_bridge": {"deltaEr_eV": -0.70, "Ea_eV": 1.54},
+        },
+    },
+    "ets": {
+        "SiO2": {
+            "OH": {"deltaEr_eV": -0.30, "Ea_eV": 1.10},
+            "O_bridge": {"deltaEr_eV": 0.74, "Ea_eV": 1.46},
+        },
+        "SiN": {
+            "NH2": {"deltaEr_eV": -0.95, "Ea_eV": 0.79},
+            "NH_bridge": {"deltaEr_eV": -0.85, "Ea_eV": 0.80},
+        },
+    },
+}
+
+# Default site-density fractions when slab atom counts unavailable (Kim et al. 2026).
+_DEFAULT_SITE_FRACTIONS: dict[str, dict[str, float]] = {
+    "SiO2": {"OH": 0.616, "O_bridge": 0.384},       # 6.19 / (6.19+3.86)
+    "SiN": {"NH2": 0.525, "NH_bridge": 0.475},     # 3.91 / (3.91+3.53)
+}
 
 logger = logging.getLogger(__name__)
 
@@ -55,6 +88,10 @@ class SurfaceReactivityValidator:
         run_dir = datasets_dir.parent
 
         inhibitor = spec.get("inhibitor", "acetic acid")
+        # For AI-proposed novel compounds, build the molecule from the emitted SMILES.
+        mol_ident = spec.get("inhibitor_smiles") or inhibitor
+        prior_source = spec.get("prior_source", "builtin")
+        is_novel = prior_source == "ai-proposed"
         precursor = spec.get("precursor", "BDEAS")
         gs_label = spec.get("growth_surface", "a-SiO2")
         ngs_label = spec.get("non_growth_surface", "a-SiN")
@@ -95,20 +132,61 @@ class SurfaceReactivityValidator:
 
         # ---- Step 2: inhibitor adsorption screen ------------------------------------
         calc, engine = self._maybe_calculator(tier, settings)
-        dE_ngs = self._adsorption_samples(
-            ngs_pass, inhibitor, dE_ngs_prior, prior_std, calc, engine
+        dE_ngs_list, cfg_ngs = self._adsorption_samples(
+            ngs_pass, mol_ident, dE_ngs_prior, prior_std, calc, engine, settings
         )
-        dE_gs = self._adsorption_samples(
-            gs_pass, inhibitor, dE_gs_prior, prior_std, calc, engine
+        dE_gs_list, cfg_gs = self._adsorption_samples(
+            gs_pass, mol_ident, dE_gs_prior, prior_std, calc, engine, settings
         )
-        dE_ngs = np.array(dE_ngs, float)
-        dE_gs = np.array(dE_gs, float)
+        dE_ngs = np.array(dE_ngs_list, float)
+        dE_gs = np.array(dE_gs_list, float)
+
+        site_reactivity_report = None
+        use_site = getattr(settings, "use_site_resolved_reactivity", True)
 
         # ---- Step 3: coverage + differential blocking -------------------------------
-        theta_ngs = np.array([coverage_from_dE(d, T, dose_ratio) for d in dE_ngs])
-        theta_gs = np.array([coverage_from_dE(d, T, dose_ratio) for d in dE_gs])
-        block_ngs = np.array([blocking_coverage_from_dE(d, T, dose_ratio) for d in dE_ngs])
-        block_gs = np.array([blocking_coverage_from_dE(d, T, dose_ratio) for d in dE_gs])
+        if use_site:
+            block_ngs, block_gs, site_reactivity_report = self._site_resolved_blocking(
+                ngs_pass, gs_pass, inhibitor, spec, dE_ngs, dE_gs, T, dose_ratio, settings
+            )
+            theta_ngs = block_ngs.copy()
+            theta_gs = block_gs.copy()
+        else:
+            theta_ngs = np.array([coverage_from_dE(d, T, dose_ratio) for d in dE_ngs])
+            theta_gs = np.array([coverage_from_dE(d, T, dose_ratio) for d in dE_gs])
+            block_ngs = np.array([blocking_coverage_from_dE(d, T, dose_ratio) for d in dE_ngs])
+            block_gs = np.array([blocking_coverage_from_dE(d, T, dose_ratio) for d in dE_gs])
+
+        # ---- Step 4b: RSA steric cap (Phase 2) --------------------------------------
+        # A bulky inhibitor cannot reach full monolayer; cap blocking at the RSA jamming
+        # fraction for its footprint on the real surface area. Tier-1+ only, so Tier-0
+        # numeric runs are unchanged.
+        rsa_info = None
+        if tier >= 1 and getattr(settings, "use_rsa_coverage", True):
+            try:
+                from .mlip import build_molecule
+                from .rsa import (
+                    apply_rsa_cap,
+                    molecule_footprint_diameter_nm,
+                    rsa_cap_fraction,
+                )
+
+                mol = build_molecule(mol_ident)
+                ngs_area = ngs_pass[0].area_nm2 if ngs_pass else 1.0
+                gs_area = gs_pass[0].area_nm2 if gs_pass else 1.0
+                rsa_ngs = rsa_cap_fraction(mol, ngs_area, seed=seed0)
+                rsa_gs = rsa_cap_fraction(mol, gs_area, seed=seed0 + 1)
+                block_ngs = np.array([apply_rsa_cap(b, rsa_ngs) for b in block_ngs])
+                block_gs = np.array([apply_rsa_cap(b, rsa_gs) for b in block_gs])
+                rsa_info = {
+                    "inhibitor_footprint_diam_nm": round(
+                        molecule_footprint_diameter_nm(mol), 3
+                    ),
+                    "rsa_jamming_fraction_ngs": round(rsa_ngs, 4),
+                    "rsa_jamming_fraction_gs": round(rsa_gs, 4),
+                }
+            except Exception as exc:  # noqa: BLE001 -- keep ideal blocking on failure
+                logger.warning("RSA coverage skipped (%s)", exc)
 
         # ---- Step 5: per-surface selectivity -> ensemble mean +/- std ---------------
         model = SelectivityModel()
@@ -126,6 +204,16 @@ class SurfaceReactivityValidator:
             else "partially_supported" if s_mean >= 0.75 * target_sel
             else "rejected"
         )
+        # An AI-proposed novel compound cannot be "supported" on Tier-0 literature priors
+        # alone: it has no direct experimental/DFT grounding, so it must be validated on the
+        # real slabs (Tier-1 MLIP) first. Cap at partially_supported until then.
+        novel_review_note = None
+        if is_novel and tier < 1 and verdict_str == "supported":
+            verdict_str = "partially_supported"
+            novel_review_note = (
+                "AI-proposed novel compound: verdict capped at partially_supported because "
+                "it has only Tier-0 priors; run Tier-1 (MLIP on real slabs) to confirm."
+            )
         verdict = {
             "supported": ValidationVerdict.SUPPORTED,
             "partially_supported": ValidationVerdict.PARTIALLY_SUPPORTED,
@@ -150,6 +238,42 @@ class SurfaceReactivityValidator:
                 "prior_source_ids": spec.get("prior_source_ids", []),
                 "validity_flag": flag,
             }
+            # Compare predicted Ea vs literature (Kim et al. 2026) when available.
+            lit_ea = spec.get("literature_Ea_ngs_eV")
+            if lit_ea is not None and site_reactivity_report:
+                pred_ea = site_reactivity_report.get("ngs_mean_Ea_eV")
+                if pred_ea is not None:
+                    ea_err = abs(float(pred_ea) - float(lit_ea))
+                    calib["literature_Ea_ngs_eV"] = round(float(lit_ea), 4)
+                    calib["predicted_Ea_ngs_eV"] = round(float(pred_ea), 4)
+                    calib["Ea_abs_error_eV"] = round(ea_err, 4)
+                    if ea_err > 0.3:
+                        calib["validity_flag"] = "review"
+
+            # Tier-2 GFN2-xTB spot-check: an independent cross-check of the MLIP dE.
+            if tier >= 2 and calc is not None:
+                try:
+                    from .xtb import spotcheck_dE, xtb_available
+
+                    surf = next((s for s in ngs_pass if s.atoms is not None), None)
+                    if xtb_available() and surf is not None:
+                        from .mlip import build_molecule
+
+                        n_sp = getattr(settings, "xtb_spotcheck_sites", 1)
+                        xr = spotcheck_dE(
+                            surf.atoms, build_molecule(mol_ident), surf.material,
+                            n_sites=n_sp, n_rot=1, heights=(2.4,),
+                        )
+                        xtb_err = abs(float(xr["dE_ads_eV"]) - float(dE_ngs.mean()))
+                        calib["xtb_dE_ngs_eV"] = round(float(xr["dE_ads_eV"]), 4)
+                        calib["xtb_method"] = xr["method"]
+                        calib["xtb_vs_mlip_abs_error_eV"] = round(xtb_err, 4)
+                        if xtb_err > 0.4:  # MLIP and xTB disagree strongly -> flag
+                            calib["validity_flag"] = "review"
+                    else:
+                        calib["xtb_spotcheck"] = "unavailable (tblite not installed)"
+                except Exception as exc:  # noqa: BLE001
+                    calib["xtb_spotcheck"] = f"failed: {exc}"
 
         # Selectivity curve for the Layer-4 figure (mean differential blocking).
         delay_mean = model.nucleation_delay_cycles(float(block_ngs.mean()), float(block_gs.mean()))
@@ -193,6 +317,10 @@ class SurfaceReactivityValidator:
                 "differential_selectivity_signal": round(
                     float(dE_gs.mean() - dE_ngs.mean()), 4
                 ),
+                "configs_ngs": cfg_ngs,
+                "configs_gs": cfg_gs,
+                "rsa_coverage": rsa_info,
+                "site_resolved": site_reactivity_report,
             },
             "precursor_barrier": barrier,
             "selectivity": {
@@ -209,6 +337,12 @@ class SurfaceReactivityValidator:
                 },
             },
             "calibration_vs_literature": calib,
+            "novel_compound": {
+                "is_ai_proposed": is_novel,
+                "smiles": spec.get("inhibitor_smiles"),
+                "validated_on_real_slabs": bool(is_novel and tier >= 1),
+                "note": novel_review_note,
+            } if is_novel else None,
             "verdict": verdict_str,
             "provenance": {
                 "engine": engine,
@@ -288,26 +422,136 @@ class SurfaceReactivityValidator:
             logger.warning("MLIP unavailable (%s); falling back to Tier-0 priors", exc)
             return None, "tier0-literature-priors (MLIP unavailable)"
 
-    def _adsorption_samples(self, surfaces, inhibitor, prior_mean, prior_std, calc, engine):
-        """dE per surface: MLIP when possible, else literature prior + per-surface scatter."""
+    def _adsorption_samples(self, surfaces, inhibitor, prior_mean, prior_std, calc, engine,
+                            settings=None):
+        """Return (dE_per_surface, configs).
+
+        Runs the multi-site/orientation MLIP search per surface when a calculator and an
+        ASE slab are available; otherwise falls back to the literature prior + per-surface
+        scatter (Tier-0). ``configs`` collects the sampled placements for the figures.
+        """
         out: list[float] = []
+        configs: list[dict] = []
+        mol = None
+        if calc is not None:
+            try:
+                from .mlip import build_molecule
+
+                mol = build_molecule(inhibitor)
+            except Exception as exc:  # noqa: BLE001
+                logger.warning("could not build molecule '%s' (%s); using priors",
+                               inhibitor, exc)
+                mol = None
+
+        n_sites = getattr(settings, "n_adsorption_sites", 4) if settings else 4
+        n_rot = getattr(settings, "adsorption_rotations", 4) if settings else 4
+        heights = tuple(settings.adsorption_heights) if settings else (1.8, 2.4)
+
         for s in surfaces:
             dE = None
-            if calc is not None and s.atoms is not None:
+            if calc is not None and mol is not None and s.atoms is not None:
                 try:
-                    from .mlip import adsorption_energy, build_molecule
+                    from .mlip import adsorption_energy_search
 
-                    mol = build_molecule(inhibitor)
-                    dE = adsorption_energy(s.atoms, mol, calc)["dE_ads_eV"]
+                    res = adsorption_energy_search(
+                        s.atoms, mol, calc, s.material,
+                        n_sites=n_sites, n_rot=n_rot, heights=heights,
+                    )
+                    dE = res["dE_ads_eV"]
+                    configs.append({"seed": s.seed, "dE_ads_eV": dE,
+                                    "n_configs": res["n_configs"], "regime": res["regime"]})
                 except Exception as exc:  # noqa: BLE001
-                    logger.warning("MLIP adsorption failed on surface %s (%s); using prior",
-                                   s.seed, exc)
+                    logger.warning("MLIP adsorption search failed on surface %s (%s); "
+                                   "using prior", s.seed, exc)
                     dE = None
             if dE is None:
                 rng = np.random.default_rng(s.seed)
                 dE = float(prior_mean + rng.normal(0.0, prior_std))
+                configs.append({"seed": s.seed, "dE_ads_eV": round(dE, 4),
+                                "source": "prior"})
             out.append(dE)
-        return out
+        return out, configs
+
+    def _site_resolved_blocking(
+        self, ngs_surfaces, gs_surfaces, inhibitor, spec,
+        dE_ngs, dE_gs, T, dose_ratio, settings,
+    ) -> tuple[np.ndarray, np.ndarray, dict]:
+        """Compute blocking via Kim et al. 2026 site-resolved deltaEr + Ea model."""
+        inh_key = inhibitor.strip().lower()
+        site_priors_spec = spec.get("site_reactivity") or {}
+        dose_t = getattr(settings, "dose_time_s", 60.0)
+
+        def priors_for(material: str, dE_terminal: float) -> dict[str, dict]:
+            merged = dict(_BUILTIN_SITE_PRIORS.get(inh_key, {}).get(material, {}))
+            for st, p in (site_priors_spec.get(material) or {}).items():
+                merged[st] = {**merged.get(st, {}), **p}
+            if not merged:
+                st = "OH" if material == "SiO2" else "NH2"
+                merged[st] = {"deltaEr_eV": dE_terminal, "Ea_eV": None}
+            return merged
+
+        def uses_full_site_model(ngs_priors: dict, gs_priors: dict) -> bool:
+            if inh_key in _BUILTIN_SITE_PRIORS or site_priors_spec:
+                return True
+            return len(ngs_priors) > 1 or len(gs_priors) > 1
+
+        def fractions_for(
+            surfaces, material: str, priors: dict[str, dict]
+        ) -> dict[str, float]:
+            if surfaces and surfaces[0].fidelity_report.get("site_densities"):
+                fr = site_fractions_from_densities(
+                    surfaces[0].fidelity_report["site_densities"]
+                )
+                if fr:
+                    return fr
+            if len(priors) == 1:
+                st = next(iter(priors))
+                return {st: 1.0}
+            return _DEFAULT_SITE_FRACTIONS.get(
+                material,
+                {"OH": 1.0} if material == "SiO2" else {"NH2": 1.0},
+            )
+
+        ngs_priors_mean = priors_for("SiN", float(dE_ngs.mean()))
+        gs_priors_mean = priors_for("SiO2", float(dE_gs.mean()))
+        full_site = uses_full_site_model(ngs_priors_mean, gs_priors_mean)
+
+        def blocking_one(surfaces, material, dE_arr) -> np.ndarray:
+            if not full_site:
+                # Terminal-site special case: preserve legacy blocking curve.
+                return np.array([
+                    blocking_coverage_from_dE(d, T, dose_ratio) for d in dE_arr
+                ])
+            priors = priors_for(material, float(dE_arr.mean()))
+            fracs = fractions_for(surfaces, material, priors)
+            reactivities = {
+                st: site_reactivity(
+                    p.get("deltaEr_eV", -0.5),
+                    p.get("Ea_eV"),
+                    T=T,
+                    dose_time_s=dose_t,
+                )
+                for st, p in priors.items()
+            }
+            b = site_resolved_blocking(fracs, reactivities)
+            rng = np.random.default_rng(42)
+            return np.array([max(0.0, min(1.0, b + rng.normal(0, 0.03))) for _ in surfaces])
+
+        block_ngs = blocking_one(ngs_surfaces, "SiN", dE_ngs)
+        block_gs = blocking_one(gs_surfaces, "SiO2", dE_gs)
+
+        ngs_priors = ngs_priors_mean
+        report = {
+            "model": "kim2026_site_resolved" if full_site else "terminal_legacy",
+            "ngs_site_priors": ngs_priors,
+            "gs_site_priors": gs_priors_mean,
+            "ngs_mean_Ea_eV": next(
+                (p.get("Ea_eV") for p in ngs_priors.values() if p.get("Ea_eV")), None
+            ),
+            "blocking_ngs_mean": round(float(block_ngs.mean()), 4),
+            "blocking_gs_mean": round(float(block_gs.mean()), 4),
+        }
+        return block_ngs, block_gs, report
 
     @staticmethod
     def _confidence(s_mean: float, target: float, s_std: float, calib: dict | None) -> float:
