@@ -12,7 +12,7 @@ from pathlib import Path
 
 from .config import get_settings
 from .knowledge_graph import KnowledgeGraph
-from .models import Layer1Output, OfficialHypothesis
+from .models import Layer1Output, Layer3Output, OfficialHypothesis
 
 
 class ArtifactStore:
@@ -21,6 +21,18 @@ class ArtifactStore:
         self.run_id = run_id
         self.dir = settings.artifacts_path / run_id
         self.dir.mkdir(parents=True, exist_ok=True)
+
+    @property
+    def datasets_dir(self) -> Path:
+        path = self.dir / "datasets"
+        path.mkdir(parents=True, exist_ok=True)
+        return path
+
+    @property
+    def logs_dir(self) -> Path:
+        path = self.dir / "simulation_logs"
+        path.mkdir(parents=True, exist_ok=True)
+        return path
 
     def _write(self, name: str, payload) -> Path:
         path = self.dir / name
@@ -87,3 +99,55 @@ class ArtifactStore:
 
     def save_official_hypothesis(self, official: OfficialHypothesis) -> Path:
         return self._write("official_hypothesis.json", official)
+
+    def save_layer3(self, output: Layer3Output, kg: KnowledgeGraph) -> dict[str, Path]:
+        paths: dict[str, Path] = {}
+
+        paths["validation_plan"] = self._write("validation_plan.json", output.result.plan)
+
+        paths["validation_results"] = self._write(
+            "validation_results.json",
+            {
+                "final": output.result.model_dump(),
+                "history": [r.model_dump() for r in output.history],
+                "reflections": [r.model_dump() for r in output.reflections],
+                "iterations": output.iterations,
+                "agentic_pattern": output.agentic_pattern,
+                "methodology_citations": output.methodology_citations,
+            },
+        )
+
+        paths["validation_provenance"] = self._write(
+            "validation_provenance.json",
+            {
+                "run_id": output.run_id,
+                "hypothesis": output.hypothesis_statement,
+                "agentic_pattern": output.agentic_pattern,
+                "methodology_citations": output.methodology_citations,
+                "iterations": output.iterations,
+                "loop_trace": [
+                    {
+                        "iteration": r.plan.iteration,
+                        "domain": r.plan.domain,
+                        "method": r.plan.method,
+                        "verdict": r.verdict.value,
+                        "confidence": r.confidence,
+                        "reflection": (
+                            output.reflections[i].decision
+                            if i < len(output.reflections)
+                            else None
+                        ),
+                    }
+                    for i, r in enumerate(output.history)
+                ],
+                "generated_at": output.generated_at,
+            },
+        )
+
+        paths["layer3_output"] = self._write("layer3_output.json", output)
+
+        # Re-serialize the KG now that it contains validation nodes/edges.
+        kg.save(self.dir / "knowledge_graph.json", self.dir / "knowledge_graph.graphml")
+        paths["knowledge_graph"] = self.dir / "knowledge_graph.json"
+
+        return paths

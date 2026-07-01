@@ -10,7 +10,8 @@ from __future__ import annotations
 import hashlib
 import re
 from datetime import datetime, timezone
-from typing import Literal
+from enum import Enum
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
@@ -206,3 +207,109 @@ class OfficialHypothesis(BaseModel):
     state_graph: HypothesisStateGraph = Field(default_factory=HypothesisStateGraph)
     source_hypothesis_ids: list[str] = Field(default_factory=list)
     finalized_at: str = Field(default_factory=_now)
+
+
+# ──────────────────────────── Layer 3 — In-Silico Validation ────────────────────────────
+
+
+class ValidationVerdict(str, Enum):
+    """Outcome of computationally testing a hypothesis."""
+
+    SUPPORTED = "supported"
+    PARTIALLY_SUPPORTED = "partially_supported"
+    REJECTED = "rejected"
+    INCONCLUSIVE = "inconclusive"
+
+
+class SuccessCriterion(BaseModel):
+    """A single quantitative pass/fail condition for a validation."""
+
+    metric: str = Field(description="Name of the metric this criterion checks")
+    operator: Literal["<", "<=", ">", ">=", "==", "!="] = ">"
+    threshold: float = 0.0
+    description: str = ""
+
+    def evaluate(self, value: float) -> bool:
+        ops = {
+            "<": value < self.threshold,
+            "<=": value <= self.threshold,
+            ">": value > self.threshold,
+            ">=": value >= self.threshold,
+            "==": value == self.threshold,
+            "!=": value != self.threshold,
+        }
+        return bool(ops[self.operator])
+
+
+class ValidationMetric(BaseModel):
+    """A single quantitative result produced by a validator."""
+
+    name: str
+    value: float
+    unit: str = ""
+    threshold: float | None = None
+    passed: bool | None = None
+    note: str = ""
+
+
+class ValidationPlan(BaseModel):
+    """The in-silico experiment designed for a hypothesis (ReAct output)."""
+
+    domain: str = Field(
+        default="statistical",
+        description="Validation domain: statistical|cheminformatics|mechanistic|protein",
+    )
+    method: str = Field(default="", description="Concrete method/test to run")
+    rationale: str = ""
+    reasoning_trace: list[str] = Field(default_factory=list)
+    parameters: dict[str, Any] = Field(default_factory=dict)
+    data_spec: dict[str, Any] = Field(
+        default_factory=dict, description="Spec for the synthetic dataset/model to generate"
+    )
+    success_criteria: list[SuccessCriterion] = Field(default_factory=list)
+    assumptions: list[str] = Field(default_factory=list)
+    seed: int = 42
+    iteration: int = 0
+
+
+class ValidationResult(BaseModel):
+    """Quantitative evidence produced by a validator agent."""
+
+    run_id: str
+    hypothesis_statement: str
+    plan: ValidationPlan
+    metrics: list[ValidationMetric] = Field(default_factory=list)
+    verdict: ValidationVerdict = ValidationVerdict.INCONCLUSIVE
+    confidence: float = Field(default=0.5, ge=0.0, le=1.0)
+    narrative: str = ""
+    artifact_paths: dict[str, str] = Field(default_factory=dict)
+    generated_at: str = Field(default_factory=_now)
+
+
+class Reflection(BaseModel):
+    """A Reflection-agent critique deciding whether to refine the experiment."""
+
+    decision: Literal["accept", "refine"] = "accept"
+    critique: str = ""
+    suggested_adjustments: list[str] = Field(default_factory=list)
+
+
+METHODOLOGY_CITATIONS = [
+    "Seal et al., AI Agents in Drug Discovery, arXiv:2510.27130",
+    "Pham et al., DrugPipe, https://github.com/HySonLab/DrugPipe",
+    "Schneuing et al., DiffSBDD, arXiv:2210.13695",
+]
+
+
+class Layer3Output(BaseModel):
+    """Complete persistent output of the In-Silico Validation layer."""
+
+    run_id: str
+    hypothesis_statement: str
+    result: ValidationResult
+    history: list[ValidationResult] = Field(default_factory=list)
+    reflections: list[Reflection] = Field(default_factory=list)
+    iterations: int = 1
+    agentic_pattern: str = "Supervisor + Swarm + ReAct + Reflection"
+    methodology_citations: list[str] = Field(default_factory=lambda: list(METHODOLOGY_CITATIONS))
+    generated_at: str = Field(default_factory=_now)

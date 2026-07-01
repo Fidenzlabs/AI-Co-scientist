@@ -72,6 +72,42 @@ class KnowledgeGraph:
                 source_ids=list(relation.source_ids),
             )
 
+    def add_validation_result(
+        self,
+        result_id: str,
+        domain: str,
+        verdict: str,
+        confidence: float,
+        related_concept_ids: list[str],
+        source_ids: list[str],
+    ) -> str:
+        """Link a Layer 3 validation result into the KG for full traceability.
+
+        Adds a ``validation_result`` node and connects it to the hypothesis's related
+        concepts via ``evidence_for`` edges. ``source_ids`` reference the simulation
+        artifacts (datasets/logs) that produced the result.
+        """
+        node_id = f"validation_result:{result_id}"
+        self.graph.add_node(
+            node_id,
+            name=f"Validation {result_id} ({verdict})",
+            type="validation_result",
+            description=f"{domain} in-silico validation: {verdict} (confidence {confidence}).",
+            domains=[domain],
+            source_ids=list(source_ids),
+        )
+        for cid in related_concept_ids:
+            if self.graph.has_node(cid):
+                self.graph.add_edge(
+                    node_id,
+                    cid,
+                    key="evidence_for",
+                    relation="evidence_for",
+                    description=f"In-silico evidence ({verdict}) for this concept.",
+                    source_ids=list(source_ids),
+                )
+        return node_id
+
     def merge_subgraph(self, sub: DomainSubgraph) -> None:
         """Merge one domain swarm's subgraph into the unified graph."""
         for concept in sub.concepts:
@@ -178,4 +214,16 @@ class KnowledgeGraph:
         kg = cls()
         for sub in subgraphs:
             kg.merge_subgraph(sub)
+        return kg
+
+    @classmethod
+    def from_concepts_relations(
+        cls, concepts: list[Concept], relations: list[Relation]
+    ) -> "KnowledgeGraph":
+        """Rebuild a graph from persisted Layer 1 concepts/relations."""
+        kg = cls()
+        for concept in concepts:
+            kg.add_concept(concept)
+        for relation in relations:
+            kg.add_relation(relation)
         return kg

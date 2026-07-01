@@ -36,6 +36,9 @@ class Settings(BaseSettings):
     num_hypotheses: int = Field(default=8, alias="NUM_HYPOTHESES")
     artifacts_dir: str = Field(default="artifacts", alias="ARTIFACTS_DIR")
 
+    # Layer 3 — bounded reflection / closed-loop refinement budget
+    max_validation_iters: int = Field(default=2, alias="MAX_VALIDATION_ITERS")
+
     @property
     def artifacts_path(self) -> Path:
         path = Path(self.artifacts_dir)
