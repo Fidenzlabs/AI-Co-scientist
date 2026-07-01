@@ -43,6 +43,10 @@ class ArtifactStore:
         path.write_text(json.dumps(data, indent=2, default=str), encoding="utf-8")
         return path
 
+    def write_json(self, name: str, payload) -> Path:
+        """Public helper for auxiliary JSON artifacts (e.g. kg_candidates.json)."""
+        return self._write(name, payload)
+
     def save_layer1(self, output: Layer1Output, kg: KnowledgeGraph) -> dict[str, Path]:
         paths: dict[str, Path] = {}
 

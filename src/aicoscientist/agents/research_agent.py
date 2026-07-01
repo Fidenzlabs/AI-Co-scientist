@@ -57,6 +57,14 @@ class ResearchAgent:
         else:
             concepts, relations = self._extract_llm(idea, domain, citations)
 
+        # Mine quantitative AS-ALD knowledge (inhibitor dE, regimes) into typed KG nodes,
+        # regardless of online/offline, so the candidate library is literature-grounded.
+        from ..surface_mining import mine_concepts
+
+        mined_concepts, mined_relations = mine_concepts(citations, domain=domain)
+        concepts = concepts + mined_concepts
+        relations = relations + mined_relations
+
         return DomainSubgraph(
             domain=domain,
             keywords=keywords,

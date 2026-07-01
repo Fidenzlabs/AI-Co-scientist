@@ -64,7 +64,23 @@ class ReflectionAgent:
     def _review_heuristic(self, result: ValidationResult) -> Reflection:
         inconclusive = result.verdict == ValidationVerdict.INCONCLUSIVE
         partial = result.verdict == ValidationVerdict.PARTIALLY_SUPPORTED
+        rejected = result.verdict == ValidationVerdict.REJECTED
         low_conf = result.confidence < _CONFIDENCE_FLOOR
+
+        # A rejected committed candidate -> explore an alternative inhibitor/precursor pair
+        # (the "keep exploring" behavior); the designer advances to the next-ranked pair.
+        if rejected:
+            return Reflection(
+                decision="refine",
+                critique=(
+                    f"Committed candidate rejected (S below target at confidence "
+                    f"{result.confidence:.2f}); exploring the next-ranked inhibitor/precursor."
+                ),
+                suggested_adjustments=[
+                    "Advance to the next-ranked candidate pair from the selection agent",
+                    "Prefer a candidate with weaker growth-surface (GS) physisorption",
+                ],
+            )
 
         if inconclusive or (partial and low_conf):
             adjustments = ["Increase synthetic sample size / simulation resolution"]

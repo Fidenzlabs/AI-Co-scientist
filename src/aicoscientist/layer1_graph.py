@@ -146,6 +146,20 @@ def synthesize(state: CoScientistState) -> dict:
 
     store = ArtifactStore(run_id)
     paths = store.save_layer1(output, kg)
+
+    # Mine a literature-grounded inhibitor/precursor candidate library from the citations
+    # so the Layer-3 selection agent can auto-populate its priors (ADR-001/ADR-005).
+    from .surface_mining import mine_candidates
+
+    candidates = mine_candidates(citations)
+    store.write_json(
+        "kg_candidates.json",
+        {"inhibitors": candidates, "n_inhibitors": len(candidates)},
+    )
+    trace.append(
+        f"Mined {len(candidates)} literature-grounded inhibitor candidate(s) into "
+        f"kg_candidates.json."
+    )
     logger.info("persisted Layer 1 artifacts to %s", store.dir)
 
     top = output.top(5)

@@ -32,17 +32,26 @@ _FILMS = {
 
 
 def _canonical_inhibitor(text: str) -> str | None:
+    # Match by earliest occurrence in the text, not by list order, so the molecule the
+    # author actually named wins over incidental mentions elsewhere in the corpus.
+    best: tuple[int, str] | None = None
     for name in _INHIBITORS:
-        if name in text:
-            return "acetic acid" if name == "carboxylic acid" else name
-    return None
+        idx = text.find(name)
+        if idx >= 0 and (best is None or idx < best[0]):
+            best = (idx, name)
+    if best is None:
+        return None
+    name = best[1]
+    return "acetic acid" if name == "carboxylic acid" else name
 
 
 def _canonical_precursor(text: str) -> str | None:
+    best: tuple[int, str] | None = None
     for name in _PRECURSORS:
-        if name in text:
-            return name.upper()
-    return None
+        idx = text.find(name)
+        if idx >= 0 and (best is None or idx < best[0]):
+            best = (idx, name)
+    return best[1].upper() if best else None
 
 
 def _target_thickness_nm(text: str) -> float | None:
@@ -78,11 +87,13 @@ def derive_asald_spec(
     provenance_refs: list[str] | None = None,
 ) -> ASALDSpec:
     """Best-effort structured AS-ALD spec, defaulting to the verified worked example."""
+    stmt = statement.lower()
     corpus = (statement + " " + " ".join(concept_names or [])).lower()
     defaults = ASALDSpec()  # the ADR worked example (acetic acid / BDEAS, a-SiO2/a-SiN)
 
-    inhibitor = _canonical_inhibitor(corpus) or defaults.inhibitor
-    precursor = _canonical_precursor(corpus) or defaults.precursor
+    # Prefer the molecule named in the committed statement; fall back to KG concepts.
+    inhibitor = _canonical_inhibitor(stmt) or _canonical_inhibitor(corpus) or defaults.inhibitor
+    precursor = _canonical_precursor(stmt) or _canonical_precursor(corpus) or defaults.precursor
 
     growth = defaults.growth_surface
     non_growth = defaults.non_growth_surface

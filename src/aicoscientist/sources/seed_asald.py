@@ -40,10 +40,11 @@ _SEED: list[dict] = [
         "keywords": ["aniline", "inhibitor", "chemisorption", "physisorption",
                      "adsorption energy", "rsa coverage", "non-growth surface"],
         "abstract": (
-            "Aniline chemisorbs on Ru/Co non-growth areas but only physisorbs on the "
-            "SiO2 growth area. DFT adsorption energies plus random sequential "
-            "adsorption coverage explain the selective blocking: strong chemisorption "
-            "on the non-growth surface, weak physisorption on the growth surface."
+            "Aniline chemisorbs on Ru and Co non-growth areas but only physisorbs on the "
+            "SiO2 growth area. DFT gives strong chemisorption on Ru (-3.59 eV) and Co "
+            "(-2.17 eV), whereas adsorption on the SiO2 growth surface is limited to "
+            "physisorption (-0.57 eV). Aniline gave 6 nm of selective TiN growth on SiO2 "
+            "in the presence of Ru and Co non-growth areas."
         ),
     },
     {
@@ -56,9 +57,28 @@ _SEED: list[dict] = [
         "keywords": ["methanesulfonic acid", "inhibitor", "reaction barrier", "al2o3",
                      "selectivity", "sio2", "copper", "precursor"],
         "abstract": (
-            "Methanesulfonic acid shows reaction barriers on SiO2 an order of magnitude "
-            "higher than on Cu, giving >97% selective Al2O3 growth. Selectivity is "
-            "dominated by the differential precursor half-reaction barrier."
+            "Methanesulfonic acid chemisorbs on Cu while its reaction barriers on SiO2 are "
+            "an order of magnitude higher than on Cu, giving greater than 97% selective "
+            "Al2O3 growth on SiO2 with DMAI. Selectivity is dominated by the differential "
+            "precursor half-reaction barrier; TMA as precursor is far less selective."
+        ),
+    },
+    {
+        "id": "carboxylic-smi-adma-2023",
+        "title": "Area-selective spatial ALD of SiO2 with interleaved small-molecule inhibitors (ethylbutyric and pivalic acid)",
+        "authors": ["Author"],
+        "year": 2023,
+        "venue": "Advanced Materials",
+        "doi": "10.1002/adma.202301204",
+        "keywords": ["ethylbutyric acid", "pivalic acid", "carboxylic acid", "inhibitor",
+                     "sio2", "zno", "chemisorption", "physisorption", "selective"],
+        "abstract": (
+            "DFT shows dissociative chemisorption of ethylbutyric acid and pivalic acid is "
+            "not energetically feasible on SiO2 growth surfaces (endothermic, dE = 0.41 to "
+            "1.23 eV), so they only physisorb there, while chemisorption is feasible on the "
+            "ZnO non-growth area. Without strong chemisorption, physisorbed adsorbates are "
+            "removed during gas purging, so the chemisorb-on-NGS / physisorb-on-GS contrast "
+            "drives area selectivity."
         ),
     },
     {

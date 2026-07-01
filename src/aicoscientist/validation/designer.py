@@ -36,13 +36,17 @@ VALID_DOMAINS = {"surface_reactivity"}
 
 _VOL = {"low": 0.0, "medium": 0.5, "high": 1.0}
 
-# Built-in fallback library if selection_criteria.md is missing/unparseable.
+# Built-in fallback library, literature-informed. NGS numbers for a-SiN are estimates
+# (published DFT uses metal/oxide NGS, e.g. aniline chemisorbs -3.59 eV on Ru, -2.17 eV
+# on Co); GS (SiO2) physisorption numbers are taken from the cited DFT where available
+# (aniline -0.57 eV, Langmuir 2023 10.1021/acs.langmuir.2c03214).
 _DEFAULT_LIBRARY = {
     "inhibitors": {
         "acetic acid": {"dE_ngs": -1.00, "dE_gs": -0.20, "functional_group": "carboxylic acid", "volatility": "high", "removability": "high"},
         "pivalic acid": {"dE_ngs": -0.95, "dE_gs": -0.22, "functional_group": "carboxylic acid", "volatility": "high", "removability": "high"},
+        "ethylbutyric acid": {"dE_ngs": -0.98, "dE_gs": -0.24, "functional_group": "carboxylic acid", "volatility": "high", "removability": "high"},
         "methanesulfonic acid": {"dE_ngs": -1.15, "dE_gs": -0.25, "functional_group": "sulfonic acid", "volatility": "medium", "removability": "medium"},
-        "aniline": {"dE_ngs": -0.90, "dE_gs": -0.15, "functional_group": "aromatic amine", "volatility": "high", "removability": "high"},
+        "aniline": {"dE_ngs": -0.90, "dE_gs": -0.57, "functional_group": "aromatic amine", "volatility": "high", "removability": "high"},
         "octadecylphosphonic acid": {"dE_ngs": -1.30, "dE_gs": -0.30, "functional_group": "phosphonic acid", "volatility": "low", "removability": "low"},
     },
     "precursors": {
@@ -55,24 +59,86 @@ _DEFAULT_LIBRARY = {
 }
 
 
-def _load_library(path: str) -> dict:
-    """Parse the ```json``` candidate block from selection_criteria.md."""
+_MERGE_KEYS = ("dE_ngs", "dE_gs", "functional_group", "volatility", "removability")
+
+
+def _load_manual_library(path: str) -> dict:
+    """Parse the ```json``` candidate block from selection_criteria.md (human override)."""
     p = Path(path)
     if not p.exists():
-        logger.warning("selection_criteria.md not found at %s; using default library", path)
-        return _DEFAULT_LIBRARY
+        logger.info("selection_criteria.md not found at %s; no manual overrides", path)
+        return {}
     text = p.read_text(encoding="utf-8")
     m = re.search(r"```json\s*(\{.*?\})\s*```", text, re.DOTALL)
     if not m:
-        logger.warning("no json candidate block in %s; using default library", path)
-        return _DEFAULT_LIBRARY
+        logger.info("no json candidate block in %s; no manual overrides", path)
+        return {}
     try:
         lib = json.loads(m.group(1))
-        if "inhibitors" in lib and "precursors" in lib:
+        if isinstance(lib, dict):
             return lib
     except Exception as exc:  # noqa: BLE001
-        logger.warning("failed to parse candidate block (%s); using default library", exc)
-    return _DEFAULT_LIBRARY
+        logger.warning("failed to parse candidate block (%s); ignoring manual overrides", exc)
+    return {}
+
+
+def _load_kg_candidates(run_id: str) -> dict:
+    """Load the literature-mined candidate library written by Layer 1 (kg_candidates.json)."""
+    settings = get_settings()
+    p = Path(settings.artifacts_path) / run_id / "kg_candidates.json"
+    if not p.exists():
+        return {}
+    try:
+        data = json.loads(p.read_text(encoding="utf-8"))
+        return data.get("inhibitors", {}) or {}
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("failed to read kg_candidates.json (%s)", exc)
+        return {}
+
+
+def _merge_libraries(manual: dict, kg: dict, run_id: str) -> tuple[dict, dict]:
+    """Merge inhibitor priors with precedence set by PRIORS_SOURCE.
+
+    Base is the built-in default; KG-mined and manual layers overlay it. In ``auto`` mode
+    KG-mined values win; in ``manual`` mode selection_criteria.md wins. Returns the merged
+    ``{inhibitors, precursors}`` library plus a ``provenance`` map recording, per inhibitor,
+    which layer set ``dE_ngs`` and whether that value is extrapolated from another surface.
+    """
+    settings = get_settings()
+    manual_inh = (manual or {}).get("inhibitors", {})
+    default_inh = _DEFAULT_LIBRARY["inhibitors"]
+
+    # Precedence: later entries override earlier ones for the same key.
+    if settings.priors_source.lower() == "manual":
+        layers = [("builtin", default_inh), ("kg-mined", kg), ("manual", manual_inh)]
+    else:  # auto (default): literature (KG) wins over the shipped manual defaults
+        layers = [("builtin", default_inh), ("manual", manual_inh), ("kg-mined", kg)]
+
+    names = set().union(*(set(layer.keys()) for _, layer in layers))
+    merged: dict[str, dict] = {}
+    provenance: dict[str, dict] = {}
+    for name in names:
+        entry: dict = {}
+        prov = {"dE_ngs_source": "builtin", "ngs_extrapolated": False, "source_ids": []}
+        for src_name, layer in layers:
+            src = layer.get(name)
+            if not src:
+                continue
+            for k in _MERGE_KEYS:
+                v = src.get(k)
+                if v is not None:
+                    entry[k] = v
+                    if k == "dE_ngs":
+                        prov["dE_ngs_source"] = src_name
+                        prov["ngs_extrapolated"] = bool(src.get("ngs_extrapolated", False))
+                        prov["source_ids"] = src.get("source_ids", prov["source_ids"])
+        entry.setdefault("dE_ngs", -1.0)
+        entry.setdefault("dE_gs", -0.2)
+        merged[name] = entry
+        provenance[name] = prov
+
+    precursors = (manual or {}).get("precursors") or _DEFAULT_LIBRARY["precursors"]
+    return {"inhibitors": merged, "precursors": precursors}, provenance
 
 
 class ExperimentDesigner:
@@ -91,22 +157,34 @@ class ExperimentDesigner:
         settings = get_settings()
         concept_names = concept_names or []
         spec = official.asald or ASALDSpec()
-        library = _load_library(settings.selection_criteria_path)
+
+        manual = _load_manual_library(settings.selection_criteria_path)
+        kg = _load_kg_candidates(official.run_id)
+        library, provenance = _merge_libraries(manual, kg, official.run_id)
 
         ranked = self._rank_inhibitors(library, spec, concept_names)
         # On refinement, advance to the next-ranked inhibitor (persist / keep exploring).
         idx = min(iteration, len(ranked) - 1)
         inhibitor, props = ranked[idx]
+        prov = provenance.get(inhibitor, {"dE_ngs_source": "builtin",
+                                          "ngs_extrapolated": False, "source_ids": []})
 
         precursor, target_film = self._choose_precursor(library, spec)
 
+        n_kg = len(kg)
+        n_manual = len((manual or {}).get("inhibitors", {}))
         trace = [
-            f"Retrieved {len(ranked)} inhibitor candidates grounded in the KG "
-            f"(criteria: {settings.selection_criteria_path}).",
-            f"Ranked by differential adsorption + volatility + removability; "
-            f"selected '{inhibitor}' (rank {idx + 1}).",
+            f"Prior sources merged (mode={settings.priors_source}): {n_kg} KG-mined, "
+            f"{n_manual} manual, {len(_DEFAULT_LIBRARY['inhibitors'])} built-in defaults.",
+            f"Retrieved {len(ranked)} inhibitor candidates; ranked by differential "
+            f"adsorption + volatility + removability.",
+            f"Selected '{inhibitor}' (rank {idx + 1}); dE_ngs from '{prov['dE_ngs_source']}'"
+            + (" [extrapolated from another NGS material]" if prov["ngs_extrapolated"] else "")
+            + ".",
             f"Paired with precursor '{precursor}' for target film {target_film}.",
         ]
+        if prov["source_ids"]:
+            trace.append(f"dE_ngs supported by citations: {', '.join(prov['source_ids'])}.")
         if prior_critique and prior_critique.decision == "refine":
             trace.append(f"Refinement: {prior_critique.critique}")
 
@@ -149,6 +227,9 @@ class ExperimentDesigner:
                 "ensemble_n": settings.surface_ensemble_n,
                 "compute_tier": settings.compute_tier,
                 "provenance_refs": spec.provenance_refs,
+                "prior_source": prov["dE_ngs_source"],
+                "prior_extrapolated": prov["ngs_extrapolated"],
+                "prior_source_ids": prov["source_ids"],
             },
             success_criteria=[
                 SuccessCriterion(
@@ -183,7 +264,7 @@ class ExperimentDesigner:
             if name.lower() in kg_text:      # grounded in the literature KG -> preferred
                 s += 0.3
             if name.lower() == spec.inhibitor.lower():  # honor the committed choice first
-                s += 1.0
+                s += 100.0
             return s
 
         ranked = sorted(inhibitors.items(), key=lambda kv: score(*kv), reverse=True)

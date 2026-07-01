@@ -24,6 +24,17 @@ class Settings(BaseSettings):
     openai_api_key: str | None = Field(default=None, alias="OPENAI_API_KEY")
     anthropic_api_key: str | None = Field(default=None, alias="ANTHROPIC_API_KEY")
 
+    # Google Gemini via AI Studio API keys (provider: google_genai)
+    google_api_key: str | None = Field(default=None, alias="GOOGLE_API_KEY")
+    # Google Gemini via Vertex AI (provider: google_vertexai; uses ADC / service account)
+    google_cloud_project: str | None = Field(default=None, alias="GOOGLE_CLOUD_PROJECT")
+    google_cloud_location: str = Field(
+        default="us-central1", alias="GOOGLE_CLOUD_LOCATION"
+    )
+    google_application_credentials: str | None = Field(
+        default=None, alias="GOOGLE_APPLICATION_CREDENTIALS"
+    )
+
     # Sources
     contact_email: str = Field(default="anonymous@example.com", alias="CONTACT_EMAIL")
     semantic_scholar_api_key: str | None = Field(
@@ -55,6 +66,14 @@ class Settings(BaseSettings):
     )
     selection_criteria_path: str = Field(
         default="selection_criteria.md", alias="SELECTION_CRITERIA_PATH"
+    )
+    priors_source: str = Field(
+        default="auto",
+        alias="PRIORS_SOURCE",
+        description=(
+            "auto = KG-mined literature priors win; manual = selection_criteria.md wins. "
+            "Both are always merged over built-in defaults."
+        ),
     )
 
     @property

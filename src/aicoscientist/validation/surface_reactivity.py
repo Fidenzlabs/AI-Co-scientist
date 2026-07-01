@@ -136,11 +136,19 @@ class SurfaceReactivityValidator:
         calib = None
         if literature_dE_ngs is not None:
             abs_err = abs(float(dE_ngs.mean()) - float(literature_dE_ngs))
+            prior_source = spec.get("prior_source", "builtin")
+            extrapolated = bool(spec.get("prior_extrapolated", False))
+            flag = "ok" if abs_err < 0.3 else "review"
+            if extrapolated:  # NGS prior taken from a different surface material
+                flag = "review"
             calib = {
                 "predicted_dE_ngs_eV": round(float(dE_ngs.mean()), 4),
                 "literature_dE_ngs_eV": round(float(literature_dE_ngs), 4),
                 "abs_error_eV": round(abs_err, 4),
-                "validity_flag": "ok" if abs_err < 0.3 else "review",
+                "prior_source": prior_source,
+                "prior_extrapolated": extrapolated,
+                "prior_source_ids": spec.get("prior_source_ids", []),
+                "validity_flag": flag,
             }
 
         # Selectivity curve for the Layer-4 figure (mean differential blocking).
