@@ -23,10 +23,14 @@ help: ## Show this help
 
 .PHONY: install
 install: ## Editable install with the OpenAI extra (Tier-0 + Layer 4 figures)
+	$(PYTHON) -m ensurepip --upgrade
+	$(PYTHON) -m pip install --upgrade pip
 	$(PYTHON) -m pip install -e ".[openai]"
 
 .PHONY: install-mlip
 install-mlip: ## Add the Tier-1 foundation-MLIP stack (ASE + MACE)
+	$(PYTHON) -m ensurepip --upgrade
+	$(PYTHON) -m pip install --upgrade pip
 	$(PYTHON) -m pip install -e ".[mlip]"
 
 .PHONY: research
