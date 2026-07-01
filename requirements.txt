@@ -16,8 +16,13 @@ matplotlib>=3.8
 # Optional LLM provider integrations (install the one you use)
 langchain-openai>=0.2.0
 langchain-anthropic>=0.2.0
+# Google Gemini: AI Studio API keys (google_genai) and/or Vertex AI (google_vertexai)
+langchain-google-genai>=2.0.0
+langchain-google-vertexai>=2.0.0
 
 # Optional Tier-1 foundation-MLIP surface reactivity (Colab CUDA / CPU):
 #   pip install "ase>=3.23" "mace-torch>=0.3.6"
+# Optional realistic structures (real molecules + crystalline-derived slabs):
+#   pip install "rdkit>=2024.03.1" "pymatgen>=2024.0.0"
 # Optional Tier-2 semi-empirical calibration:
 #   pip install "tblite>=0.3.0"

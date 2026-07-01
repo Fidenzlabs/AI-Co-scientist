@@ -8,7 +8,7 @@
     ],
     "statement": null,
     "notes": "",
-    "decided_at": "2026-07-01T12:54:03.491258+00:00"
+    "decided_at": "2026-07-01T11:28:11.921498+00:00"
   },
   "state_graph": {
     "supporting_evidence": [
@@ -68,5 +68,5 @@
       "mock:2e7bcae76b27"
     ]
   },
-  "finalized_at": "2026-07-01T12:54:03.491318+00:00"
+  "finalized_at": "2026-07-01T11:28:11.921611+00:00"
 }

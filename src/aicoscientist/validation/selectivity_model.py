@@ -16,6 +16,61 @@ from dataclasses import dataclass
 import numpy as np
 
 KB_EV = 8.617333262e-5  # Boltzmann constant, eV/K
+HBAR_EV_S = 6.582119569e-16  # for attempt frequency scaling
+
+
+def arrhenius_rate(Ea_eV: float, T: float, attempt_freq: float = 1e13) -> float:
+    """Arrhenius rate constant k = nu * exp(-Ea / kB T) [1/s]."""
+    if Ea_eV <= 0:
+        return attempt_freq
+    return attempt_freq * math.exp(-Ea_eV / (KB_EV * T))
+
+
+def site_reactivity(
+    deltaEr_eV: float,
+    Ea_eV: float | None,
+    T: float = 423.0,
+    dose_time_s: float = 60.0,
+    attempt_freq: float = 1e13,
+) -> float:
+    """Site reactivity in [0, 1]: thermodynamic (deltaEr < 0) AND kinetic (Ea) gates.
+
+    Kim et al. 2026: exothermic chemisorption (deltaEr < 0) is required; activation
+    energy sets the rate via Arrhenius over the inhibitor dose time.
+    """
+    if deltaEr_eV >= 0:
+        return 0.0  # endothermic -> no passivation at this site
+    thermo = min(1.0, abs(deltaEr_eV) / 1.0)  # scale: |deltaEr| ~ 1 eV -> full
+    if Ea_eV is None:
+        return thermo
+    k = arrhenius_rate(Ea_eV, T, attempt_freq)
+    # Fraction reacted during dose: 1 - exp(-k * t)
+    kinetic = 1.0 - math.exp(-k * dose_time_s)
+    return thermo * min(1.0, kinetic)
+
+
+def site_resolved_blocking(
+    site_fractions: dict[str, float],
+    site_reactivities: dict[str, float],
+) -> float:
+    """Aggregate blocking = sum over site types of (density fraction x reactivity).
+
+    ``site_fractions`` should sum to ~1 (fraction of total reactive sites per type).
+    """
+    total = 0.0
+    for st, frac in site_fractions.items():
+        react = site_reactivities.get(st, 0.0)
+        total += frac * react
+    return min(1.0, total)
+
+
+def site_fractions_from_densities(densities: dict[str, float]) -> dict[str, float]:
+    """Normalise per-site-type densities to fractions."""
+    active = {k: v for k, v in densities.items() if v > 0}
+    s = sum(active.values())
+    if s <= 0:
+        return {}
+    return {k: v / s for k, v in active.items()}
 
 
 def coverage_from_dE(

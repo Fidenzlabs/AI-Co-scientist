@@ -54,15 +54,18 @@ class Surface:
     passed: bool
     fidelity_report: dict = field(default_factory=dict)
     descriptors: dict = field(default_factory=dict)
+    provenance: dict = field(default_factory=dict)  # slab source / phase / miller / capping
     atoms: Optional[object] = None  # ASE Atoms when Tier >= 1
 
 
 def _target_density_for(material_key: str) -> float:
-    """Default target density = middle of the experimental band, biased low (realistic)."""
-    lo, hi = SITE_BANDS[material_key]
+    """Default terminal-site target density (Kim et al. 2026 amorphous values)."""
+    from .hydroxylation import TARGET_DENSITIES
+
+    td = TARGET_DENSITIES.get(material_key, {})
     if material_key == "SiO2":
-        return 1.15  # Zhuravlev dehydroxylated silanol density
-    return round(0.4 * lo + 0.6 * ((lo + hi) / 2.0), 3)
+        return td.get("OH", 6.19)
+    return td.get("NH2", 3.91)
 
 
 def _build_atoms(material_key: str, n_sites: int, area_nm2: float, rng) -> "Atoms":
@@ -117,6 +120,24 @@ def _build_atoms(material_key: str, n_sites: int, area_nm2: float, rng) -> "Atom
     return atoms
 
 
+def _procedural_slab(key: str, target: float, seed: int, miller, supercell):
+    """Build a crystalline-derived, hydroxylated ASE slab for Tier-1 (Phase 1).
+
+    Returns ``(atoms, provenance)`` or raises so the caller can fall back to the toy slab.
+    """
+    from .crystal_slabs import build_slab
+    from .hydroxylation import saturate_surface
+
+    atoms, slab_prov = build_slab(
+        key, miller_index=tuple(miller), supercell=tuple(supercell)
+    )
+    # Per-seed geometric diversity so the ensemble samples real disorder, not one slab.
+    atoms.rattle(stdev=0.05, seed=seed)
+    atoms, sat = saturate_surface(atoms, key, target_density=target, seed=seed)
+    provenance = {**slab_prov, **{f"cap_{k}": v for k, v in sat.items()}}
+    return atoms, provenance
+
+
 def build_surface(
     material: str,
     target_density: Optional[float] = None,
@@ -124,12 +145,34 @@ def build_surface(
     cooling_rate: float = 0.3,
     compute_tier: int = 0,
     max_condense_steps: int = 6,
+    slab_source: Optional[str] = None,
+    slab_miller: Optional[tuple] = None,
+    supercell: Optional[tuple] = None,
 ) -> Surface:
-    """Build one gated amorphous slab targeting ``target_density`` sites/nm^2."""
+    """Build one gated slab targeting ``target_density`` sites/nm^2.
+
+    Tier 0 -> numeric site inventory. Tier >= 1 -> an ASE slab: a crystalline-derived
+    hydroxylated surface (``slab_source='procedural'``, Phase 1) or the legacy toy slab
+    (``'toy'``). Procedural build failures fall back to the toy slab.
+    """
     gate = SurfaceFidelityGate(material)
     key = gate.material
     lo, hi = gate.lo, gate.hi
     target = target_density if target_density is not None else _target_density_for(key)
+
+    # Resolve slab settings from config when not explicitly provided.
+    if slab_source is None or slab_miller is None or supercell is None:
+        try:
+            from ..config import get_settings
+
+            s = get_settings()
+            slab_source = slab_source or s.slab_source
+            slab_miller = slab_miller or s.slab_miller_for(key)
+            supercell = supercell or s.slab_supercell
+        except Exception:  # noqa: BLE001
+            slab_source = slab_source or "procedural"
+            slab_miller = slab_miller or (1, 0, 0)
+            supercell = supercell or (2, 2)
 
     rng = np.random.default_rng(seed)
     # Melt-quench disorder: faster cooling (higher cooling_rate) -> more scatter.
@@ -149,10 +192,21 @@ def build_surface(
 
     atoms = None
     descriptors: dict = {}
+    provenance: dict = {"source": "tier0-numeric"}
     if compute_tier >= 1 and _HAVE_ASE:
-        atoms = _build_atoms(key, n_sites, area_nm2, rng)
-        report = gate.check(atoms=atoms, seed=seed)
+        if slab_source == "procedural":
+            try:
+                atoms, provenance = _procedural_slab(
+                    key, density, seed, slab_miller, supercell
+                )
+            except Exception as exc:  # noqa: BLE001 -- fall back to the toy slab
+                atoms = _build_atoms(key, n_sites, area_nm2, rng)
+                provenance = {"source": "toy-fallback", "reason": str(exc)}
+        else:
+            atoms = _build_atoms(key, n_sites, area_nm2, rng)
+            provenance = {"source": "toy"}
         descriptors = describe(atoms)
+        report = gate.check(atoms=atoms, seed=seed, descriptors=descriptors)
         n_sites = report["n_sites"]
         area_nm2 = report["area_nm2"]
     else:
@@ -170,6 +224,7 @@ def build_surface(
         passed=report["passed"],
         fidelity_report=report,
         descriptors=descriptors,
+        provenance=provenance,
         atoms=atoms,
     )
 
@@ -209,5 +264,7 @@ def ensemble_fidelity_summary(surfaces: list[Surface]) -> dict:
         "site_density_std": round(float(np.std(dens)), 3) if dens else 0.0,
         "n_passed": int(sum(s.passed for s in surfaces)),
         "all_passed": bool(all(s.passed for s in surfaces)) if surfaces else False,
+        "slab_provenance": surfaces[0].provenance if surfaces else {},
+        "descriptors_example": surfaces[0].descriptors if surfaces else {},
         "reports": [s.fidelity_report for s in surfaces],
     }

@@ -1,166 +1,169 @@
 <?xml version='1.0' encoding='utf-8'?>
-<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key id="d7" for="edge" attr.name="source_ids" attr.type="string"/>
-<key id="d6" for="edge" attr.name="description" attr.type="string"/>
-<key id="d5" for="edge" attr.name="relation" attr.type="string"/>
-<key id="d4" for="node" attr.name="source_ids" attr.type="string"/>
-<key id="d3" for="node" attr.name="domains" attr.type="string"/>
-<key id="d2" for="node" attr.name="description" attr.type="string"/>
-<key id="d1" for="node" attr.name="type" attr.type="string"/>
-<key id="d0" for="node" attr.name="name" attr.type="string"/>
-<graph edgedefault="directed"><node id="inhibitor">
-  <data key="d0">inhibitor</data>
-  <data key="d1">concept</data>
-  <data key="d2">Concept extracted from Amorphous surface models literature.</data>
-  <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
-  <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:msa-al2o3-2024,seed_asald:parsons-clark-2020,seed_asald:tezsevin-2023</data>
-</node>
-<node id="precursor">
-  <data key="d0">precursor</data>
-  <data key="d1">concept</data>
-  <data key="d2">Concept extracted from Amorphous surface models literature.</data>
-  <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
-  <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:msa-al2o3-2024,seed_asald:parsons-clark-2020,seed_asald:tezsevin-2023</data>
-</node>
-<node id="surface">
-  <data key="d0">surface</data>
-  <data key="d1">concept</data>
-  <data key="d2">Concept extracted from Amorphous surface models literature.</data>
-  <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
-  <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:parsons-clark-2020,seed_asald:silica-silanol-2025,seed_asald:tezsevin-2023</data>
-</node>
-<node id="growth">
-  <data key="d0">growth</data>
-  <data key="d1">concept</data>
-  <data key="d2">Concept extracted from Amorphous surface models literature.</data>
-  <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
-  <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:msa-al2o3-2024,seed_asald:parsons-clark-2020,seed_asald:tezsevin-2023</data>
-</node>
-<node id="area-selective">
-  <data key="d0">area-selective</data>
-  <data key="d1">concept</data>
-  <data key="d2">Concept extracted from Amorphous surface models literature.</data>
-  <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
-  <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:msa-al2o3-2024,seed_asald:parsons-clark-2020</data>
-</node>
-<node id="selectivity">
-  <data key="d0">selectivity</data>
-  <data key="d1">concept</data>
-  <data key="d2">Concept extracted from Amorphous surface models literature.</data>
-  <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
-  <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:msa-al2o3-2024,seed_asald:parsons-clark-2020</data>
-</node>
-<node id="deposition">
-  <data key="d0">deposition</data>
-  <data key="d1">concept</data>
-  <data key="d2">Concept extracted from Amorphous surface models literature.</data>
-  <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
-  <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:parsons-clark-2020</data>
-</node>
-<node id="while">
-  <data key="d0">while</data>
-  <data key="d1">concept</data>
-  <data key="d2">Concept extracted from Amorphous surface models literature.</data>
-  <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
-  <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:parsons-clark-2020</data>
-</node>
-<node id="film">
-  <data key="d0">film</data>
-  <data key="d1">concept</data>
-  <data key="d2">Concept extracted from Amorphous surface models literature.</data>
-  <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
-  <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:parsons-clark-2020</data>
-</node>
-<node id="area-selective-deposition">
-  <data key="d0">area-selective deposition</data>
-  <data key="d1">concept</data>
-  <data key="d2">Concept extracted from Amorphous surface models literature.</data>
-  <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
-  <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:parsons-clark-2020</data>
-</node>
-<node id="synthetic">
-  <data key="d0">synthetic</data>
-  <data key="d1">concept</data>
-  <data key="d2">Concept extracted from Amorphous surface models literature.</data>
-  <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
-  <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a</data>
-</node>
-<node id="abstract">
-  <data key="d0">abstract</data>
-  <data key="d1">concept</data>
-  <data key="d2">Concept extracted from Amorphous surface models literature.</data>
-  <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
-  <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a</data>
-</node>
-<node id="validation_result:demo-surface_reactivity">
-  <data key="d0">Validation demo-surface_reactivity (supported)</data>
-  <data key="d1">validation_result</data>
-  <data key="d2">surface_reactivity in-silico validation: supported (confidence 0.559).</data>
-  <data key="d3">surface_reactivity</data>
-  <data key="d4">artifacts/demo/asald_results.json,artifacts/demo/surface_fidelity.json,artifacts/demo/simulation_logs/surface_reactivity_iter0.json</data>
-</node>
-<edge source="inhibitor" target="precursor" id="0">
-  <data key="d5">associated_with</data>
-  <data key="d6">Co-occurrence in domain literature.</data>
-  <data key="d7">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:msa-al2o3-2024,seed_asald:parsons-clark-2020,seed_asald:tezsevin-2023</data>
-</edge>
-<edge source="precursor" target="surface" id="0">
-  <data key="d5">associated_with</data>
-  <data key="d6">Co-occurrence in domain literature.</data>
-  <data key="d7">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:parsons-clark-2020,seed_asald:tezsevin-2023</data>
-</edge>
-<edge source="surface" target="growth" id="0">
-  <data key="d5">associated_with</data>
-  <data key="d6">Co-occurrence in domain literature.</data>
-  <data key="d7">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:parsons-clark-2020,seed_asald:tezsevin-2023</data>
-</edge>
-<edge source="growth" target="area-selective" id="0">
-  <data key="d5">associated_with</data>
-  <data key="d6">Co-occurrence in domain literature.</data>
-  <data key="d7">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:msa-al2o3-2024,seed_asald:parsons-clark-2020</data>
-</edge>
-<edge source="area-selective" target="selectivity" id="0">
-  <data key="d5">associated_with</data>
-  <data key="d6">Co-occurrence in domain literature.</data>
-  <data key="d7">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:msa-al2o3-2024,seed_asald:parsons-clark-2020</data>
-</edge>
-<edge source="selectivity" target="deposition" id="0">
-  <data key="d5">associated_with</data>
-  <data key="d6">Co-occurrence in domain literature.</data>
-  <data key="d7">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:parsons-clark-2020</data>
-</edge>
-<edge source="deposition" target="while" id="0">
-  <data key="d5">associated_with</data>
-  <data key="d6">Co-occurrence in domain literature.</data>
-  <data key="d7">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:parsons-clark-2020</data>
-</edge>
-<edge source="while" target="film" id="0">
-  <data key="d5">associated_with</data>
-  <data key="d6">Co-occurrence in domain literature.</data>
-  <data key="d7">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:parsons-clark-2020</data>
-</edge>
-<edge source="film" target="area-selective-deposition" id="0">
-  <data key="d5">associated_with</data>
-  <data key="d6">Co-occurrence in domain literature.</data>
-  <data key="d7">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:parsons-clark-2020</data>
-</edge>
-<edge source="area-selective-deposition" target="synthetic" id="0">
-  <data key="d5">associated_with</data>
-  <data key="d6">Co-occurrence in domain literature.</data>
-  <data key="d7">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a</data>
-</edge>
-<edge source="synthetic" target="abstract" id="0">
-  <data key="d5">associated_with</data>
-  <data key="d6">Co-occurrence in domain literature.</data>
-  <data key="d7">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a</data>
-</edge>
-<edge source="validation_result:demo-surface_reactivity" target="precursor" id="0">
-  <data key="d5">evidence_for</data>
-  <data key="d6">In-silico evidence (supported) for this concept.</data>
-  <data key="d7">artifacts/demo/asald_results.json,artifacts/demo/surface_fidelity.json,artifacts/demo/simulation_logs/surface_reactivity_iter0.json</data>
-</edge>
-<edge source="validation_result:demo-surface_reactivity" target="surface" id="0">
-  <data key="d5">evidence_for</data>
-  <data key="d6">In-silico evidence (supported) for this concept.</data>
-  <data key="d7">artifacts/demo/asald_results.json,artifacts/demo/surface_fidelity.json,artifacts/demo/simulation_logs/surface_reactivity_iter0.json</data>
-</edge>
-</graph></graphml>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key id="d7" for="edge" attr.name="source_ids" attr.type="string" />
+  <key id="d6" for="edge" attr.name="description" attr.type="string" />
+  <key id="d5" for="edge" attr.name="relation" attr.type="string" />
+  <key id="d4" for="node" attr.name="source_ids" attr.type="string" />
+  <key id="d3" for="node" attr.name="domains" attr.type="string" />
+  <key id="d2" for="node" attr.name="description" attr.type="string" />
+  <key id="d1" for="node" attr.name="type" attr.type="string" />
+  <key id="d0" for="node" attr.name="name" attr.type="string" />
+  <graph edgedefault="directed">
+    <node id="inhibitor">
+      <data key="d0">inhibitor</data>
+      <data key="d1">concept</data>
+      <data key="d2">Concept extracted from Amorphous surface models literature.</data>
+      <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
+      <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:msa-al2o3-2024,seed_asald:parsons-clark-2020,seed_asald:tezsevin-2023</data>
+    </node>
+    <node id="precursor">
+      <data key="d0">precursor</data>
+      <data key="d1">concept</data>
+      <data key="d2">Concept extracted from Amorphous surface models literature.</data>
+      <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
+      <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:msa-al2o3-2024,seed_asald:parsons-clark-2020,seed_asald:tezsevin-2023</data>
+    </node>
+    <node id="surface">
+      <data key="d0">surface</data>
+      <data key="d1">concept</data>
+      <data key="d2">Concept extracted from Amorphous surface models literature.</data>
+      <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
+      <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:parsons-clark-2020,seed_asald:silica-silanol-2025,seed_asald:tezsevin-2023</data>
+    </node>
+    <node id="growth">
+      <data key="d0">growth</data>
+      <data key="d1">concept</data>
+      <data key="d2">Concept extracted from Amorphous surface models literature.</data>
+      <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
+      <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:msa-al2o3-2024,seed_asald:parsons-clark-2020,seed_asald:tezsevin-2023</data>
+    </node>
+    <node id="area-selective">
+      <data key="d0">area-selective</data>
+      <data key="d1">concept</data>
+      <data key="d2">Concept extracted from Amorphous surface models literature.</data>
+      <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
+      <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:msa-al2o3-2024,seed_asald:parsons-clark-2020</data>
+    </node>
+    <node id="selectivity">
+      <data key="d0">selectivity</data>
+      <data key="d1">concept</data>
+      <data key="d2">Concept extracted from Amorphous surface models literature.</data>
+      <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
+      <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:msa-al2o3-2024,seed_asald:parsons-clark-2020</data>
+    </node>
+    <node id="deposition">
+      <data key="d0">deposition</data>
+      <data key="d1">concept</data>
+      <data key="d2">Concept extracted from Amorphous surface models literature.</data>
+      <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
+      <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:parsons-clark-2020</data>
+    </node>
+    <node id="while">
+      <data key="d0">while</data>
+      <data key="d1">concept</data>
+      <data key="d2">Concept extracted from Amorphous surface models literature.</data>
+      <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
+      <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:parsons-clark-2020</data>
+    </node>
+    <node id="film">
+      <data key="d0">film</data>
+      <data key="d1">concept</data>
+      <data key="d2">Concept extracted from Amorphous surface models literature.</data>
+      <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
+      <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:parsons-clark-2020</data>
+    </node>
+    <node id="area-selective-deposition">
+      <data key="d0">area-selective deposition</data>
+      <data key="d1">concept</data>
+      <data key="d2">Concept extracted from Amorphous surface models literature.</data>
+      <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
+      <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:parsons-clark-2020</data>
+    </node>
+    <node id="synthetic">
+      <data key="d0">synthetic</data>
+      <data key="d1">concept</data>
+      <data key="d2">Concept extracted from Amorphous surface models literature.</data>
+      <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
+      <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a</data>
+    </node>
+    <node id="abstract">
+      <data key="d0">abstract</data>
+      <data key="d1">concept</data>
+      <data key="d2">Concept extracted from Amorphous surface models literature.</data>
+      <data key="d3">Amorphous surface models,Inhibitors and passivation,Precursors and film growth,Selectivity mechanisms</data>
+      <data key="d4">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a</data>
+    </node>
+    <node id="validation_result:demo-surface_reactivity">
+      <data key="d0">Validation demo-surface_reactivity (supported)</data>
+      <data key="d1">validation_result</data>
+      <data key="d2">surface_reactivity in-silico validation: supported (confidence 0.559).</data>
+      <data key="d3">surface_reactivity</data>
+      <data key="d4">artifacts/demo/asald_results.json,artifacts/demo/surface_fidelity.json,artifacts/demo/simulation_logs/surface_reactivity_iter0.json</data>
+    </node>
+    <edge source="inhibitor" target="precursor" id="0">
+      <data key="d5">associated_with</data>
+      <data key="d6">Co-occurrence in domain literature.</data>
+      <data key="d7">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:msa-al2o3-2024,seed_asald:parsons-clark-2020,seed_asald:tezsevin-2023</data>
+    </edge>
+    <edge source="precursor" target="surface" id="0">
+      <data key="d5">associated_with</data>
+      <data key="d6">Co-occurrence in domain literature.</data>
+      <data key="d7">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:parsons-clark-2020,seed_asald:tezsevin-2023</data>
+    </edge>
+    <edge source="surface" target="growth" id="0">
+      <data key="d5">associated_with</data>
+      <data key="d6">Co-occurrence in domain literature.</data>
+      <data key="d7">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:parsons-clark-2020,seed_asald:tezsevin-2023</data>
+    </edge>
+    <edge source="growth" target="area-selective" id="0">
+      <data key="d5">associated_with</data>
+      <data key="d6">Co-occurrence in domain literature.</data>
+      <data key="d7">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:msa-al2o3-2024,seed_asald:parsons-clark-2020</data>
+    </edge>
+    <edge source="area-selective" target="selectivity" id="0">
+      <data key="d5">associated_with</data>
+      <data key="d6">Co-occurrence in domain literature.</data>
+      <data key="d7">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:msa-al2o3-2024,seed_asald:parsons-clark-2020</data>
+    </edge>
+    <edge source="selectivity" target="deposition" id="0">
+      <data key="d5">associated_with</data>
+      <data key="d6">Co-occurrence in domain literature.</data>
+      <data key="d7">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:parsons-clark-2020</data>
+    </edge>
+    <edge source="deposition" target="while" id="0">
+      <data key="d5">associated_with</data>
+      <data key="d6">Co-occurrence in domain literature.</data>
+      <data key="d7">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:parsons-clark-2020</data>
+    </edge>
+    <edge source="while" target="film" id="0">
+      <data key="d5">associated_with</data>
+      <data key="d6">Co-occurrence in domain literature.</data>
+      <data key="d7">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:parsons-clark-2020</data>
+    </edge>
+    <edge source="film" target="area-selective-deposition" id="0">
+      <data key="d5">associated_with</data>
+      <data key="d6">Co-occurrence in domain literature.</data>
+      <data key="d7">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a,seed_asald:parsons-clark-2020</data>
+    </edge>
+    <edge source="area-selective-deposition" target="synthetic" id="0">
+      <data key="d5">associated_with</data>
+      <data key="d6">Co-occurrence in domain literature.</data>
+      <data key="d7">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a</data>
+    </edge>
+    <edge source="synthetic" target="abstract" id="0">
+      <data key="d5">associated_with</data>
+      <data key="d6">Co-occurrence in domain literature.</data>
+      <data key="d7">mock:030c07b09e5d,mock:05c19ce21ee0,mock:0971be21e402,mock:255973a5c3fe,mock:2e7bcae76b27,mock:3aac389187b2,mock:42c2b65ed3ae,mock:479281fc43be,mock:47fcea5e8200,mock:5537079ab1cb,mock:623e4c5571a6,mock:62b7adf56bba,mock:6e39836363fd,mock:8bce2172077b,mock:8de299140626,mock:8df92b96055d,mock:926247b6bf7c,mock:9594e6907e3e,mock:961a5ad1bd52,mock:9d136ef0b2ce,mock:a9d122132677,mock:b8ed1f18251f,mock:b8f93159e166,mock:bfb8110910a9,mock:c9179a147440,mock:d18205b6684b,mock:d41b6b6f4e2d,mock:e0a5bc798596,mock:e1e449b9aebb,mock:ea080107e28a,mock:efe66f6848df,mock:f99279d4270e,mock:fcc3ce8076a8,mock:ff1908afcb8a</data>
+    </edge>
+    <edge source="validation_result:demo-surface_reactivity" target="precursor" id="0">
+      <data key="d5">evidence_for</data>
+      <data key="d6">In-silico evidence (supported) for this concept.</data>
+      <data key="d7">artifacts/demo/asald_results.json,artifacts/demo/surface_fidelity.json,artifacts/demo/simulation_logs/surface_reactivity_iter0.json</data>
+    </edge>
+    <edge source="validation_result:demo-surface_reactivity" target="surface" id="0">
+      <data key="d5">evidence_for</data>
+      <data key="d6">In-silico evidence (supported) for this concept.</data>
+      <data key="d7">artifacts/demo/asald_results.json,artifacts/demo/surface_fidelity.json,artifacts/demo/simulation_logs/surface_reactivity_iter0.json</data>
+    </edge>
+  </graph>
+</graphml>

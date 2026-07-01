@@ -116,7 +116,7 @@
       "surface_fidelity": "artifacts/demo/surface_fidelity.json",
       "log": "artifacts/demo/simulation_logs/surface_reactivity_iter0.json"
     },
-    "generated_at": "2026-07-01T12:54:04.177090+00:00"
+    "generated_at": "2026-07-01T11:28:55.792525+00:00"
   },
   "history": [
     {
@@ -234,7 +234,7 @@
         "surface_fidelity": "artifacts/demo/surface_fidelity.json",
         "log": "artifacts/demo/simulation_logs/surface_reactivity_iter0.json"
       },
-      "generated_at": "2026-07-01T12:54:04.177090+00:00"
+      "generated_at": "2026-07-01T11:28:55.792525+00:00"
     }
   ],
   "reflections": [
@@ -254,5 +254,5 @@
     "Fine-tuning foundation MLIPs (barrier underestimation), arXiv:2502.15582",
     "Seal et al., agentic Supervisor/Swarm/ReAct/Reflection, arXiv:2510.27130"
   ],
-  "generated_at": "2026-07-01T12:54:04.177549+00:00"
+  "generated_at": "2026-07-01T11:28:55.795626+00:00"
 }

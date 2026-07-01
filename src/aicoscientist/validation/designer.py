@@ -48,6 +48,26 @@ _DEFAULT_LIBRARY = {
         "methanesulfonic acid": {"dE_ngs": -1.15, "dE_gs": -0.25, "functional_group": "sulfonic acid", "volatility": "medium", "removability": "medium"},
         "aniline": {"dE_ngs": -0.90, "dE_gs": -0.57, "functional_group": "aromatic amine", "volatility": "high", "removability": "high"},
         "octadecylphosphonic acid": {"dE_ngs": -1.30, "dE_gs": -0.30, "functional_group": "phosphonic acid", "volatility": "low", "removability": "low"},
+        "dmatms": {
+            "dE_ngs": -0.80, "dE_gs": -0.85, "functional_group": "aminosilane",
+            "volatility": "high", "removability": "high",
+            "site_reactivity": {
+                "SiO2": {"OH": {"deltaEr_eV": -0.85, "Ea_eV": 0.48},
+                         "O_bridge": {"deltaEr_eV": 0.64, "Ea_eV": 1.50}},
+                "SiN": {"NH2": {"deltaEr_eV": -0.80, "Ea_eV": 1.34},
+                        "NH_bridge": {"deltaEr_eV": -0.70, "Ea_eV": 1.54}},
+            },
+        },
+        "ets": {
+            "dE_ngs": -0.95, "dE_gs": -0.30, "functional_group": "chlorosilane",
+            "volatility": "high", "removability": "high",
+            "site_reactivity": {
+                "SiO2": {"OH": {"deltaEr_eV": -0.30, "Ea_eV": 1.10},
+                         "O_bridge": {"deltaEr_eV": 0.74, "Ea_eV": 1.46}},
+                "SiN": {"NH2": {"deltaEr_eV": -0.95, "Ea_eV": 0.79},
+                        "NH_bridge": {"deltaEr_eV": -0.85, "Ea_eV": 0.80}},
+            },
+        },
     },
     "precursors": {
         "BDEAS": {"target_film": "SiOx"},
@@ -59,7 +79,18 @@ _DEFAULT_LIBRARY = {
 }
 
 
-_MERGE_KEYS = ("dE_ngs", "dE_gs", "functional_group", "volatility", "removability")
+_MERGE_KEYS = ("dE_ngs", "dE_gs", "functional_group", "volatility", "removability",
+               "site_reactivity", "smiles")
+
+# Precursor preferred reactive sites (Kim et al. 2026 screening protocol).
+PRECURSOR_SITE_PREFS: dict[str, list[str]] = {
+    "BDEAS": ["OH"],
+    "DIPAS": ["OH"],
+    "HCDS": ["OH"],
+    "TMA": ["OH", "O_bridge"],
+    "DMAI": ["OH", "O_bridge"],
+    "TDMAT": ["NH2"],
+}
 
 
 def _load_manual_library(path: str) -> dict:
@@ -162,6 +193,15 @@ class ExperimentDesigner:
         kg = _load_kg_candidates(official.run_id)
         library, provenance = _merge_libraries(manual, kg, official.run_id)
 
+        # Phase 2: let the generative agent invent NOVEL candidates and merge them in
+        # (ranked below the known library; picked on later refine iterations). Tagged
+        # ai-proposed + extrapolated so they can never be "supported" on priors alone.
+        n_proposed = 0
+        if getattr(settings, "use_inhibitor_proposer", False):
+            n_proposed = self._merge_proposed(
+                library, provenance, spec, concept_names
+            )
+
         ranked = self._rank_inhibitors(library, spec, concept_names)
         # On refinement, advance to the next-ranked inhibitor (persist / keep exploring).
         idx = min(iteration, len(ranked) - 1)
@@ -176,8 +216,9 @@ class ExperimentDesigner:
         trace = [
             f"Prior sources merged (mode={settings.priors_source}): {n_kg} KG-mined, "
             f"{n_manual} manual, {len(_DEFAULT_LIBRARY['inhibitors'])} built-in defaults.",
-            f"Retrieved {len(ranked)} inhibitor candidates; ranked by differential "
-            f"adsorption + volatility + removability.",
+            f"Retrieved {len(ranked)} inhibitor candidates"
+            + (f" ({n_proposed} AI-proposed novel)" if n_proposed else "")
+            + "; ranked by differential adsorption + volatility + removability.",
             f"Selected '{inhibitor}' (rank {idx + 1}); dE_ngs from '{prov['dE_ngs_source']}'"
             + (" [extrapolated from another NGS material]" if prov["ngs_extrapolated"] else "")
             + ".",
@@ -218,6 +259,7 @@ class ExperimentDesigner:
                 "target_film": target_film,
                 "target_thickness_nm": spec.target_thickness_nm,
                 "target_selectivity": spec.target_selectivity,
+                "inhibitor_smiles": props.get("smiles"),
                 "dE_ngs_eV": props["dE_ngs"],
                 "dE_gs_eV": props["dE_gs"],
                 "dE_prior_std": 0.08,
@@ -230,6 +272,8 @@ class ExperimentDesigner:
                 "prior_source": prov["dE_ngs_source"],
                 "prior_extrapolated": prov["ngs_extrapolated"],
                 "prior_source_ids": prov["source_ids"],
+                "site_reactivity": props.get("site_reactivity"),
+                "literature_Ea_ngs_eV": _literature_ea_ngs(props),
             },
             success_criteria=[
                 SuccessCriterion(
@@ -248,6 +292,47 @@ class ExperimentDesigner:
         )
         return plan
 
+    def _merge_proposed(self, library, provenance, spec, concept_names) -> int:
+        """Generate novel candidates and merge them into ``library`` in-place.
+
+        Returns the number of novel candidates added. Existing library names are never
+        overwritten; provenance records them as ai-proposed / extrapolated.
+        """
+        try:
+            from ..agents.inhibitor_proposer import InhibitorProposer, to_library_entries
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("inhibitor proposer unavailable (%s)", exc)
+            return 0
+
+        settings = get_settings()
+        inhibitors = library.setdefault("inhibitors", {})
+        existing = set(inhibitors.keys())
+        n = getattr(settings, "n_proposed_inhibitors", 3)
+        try:
+            proposer = InhibitorProposer(offline=self.offline)
+            candidates = proposer.propose(
+                spec, concept_names=concept_names, existing_names=existing,
+                n=n, citations=list(spec.provenance_refs or []),
+            )
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("inhibitor proposer failed (%s)", exc)
+            return 0
+
+        added = 0
+        for name, entry in to_library_entries(candidates).items():
+            if name in inhibitors:
+                continue
+            inhibitors[name] = entry
+            provenance[name] = {
+                "dE_ngs_source": "ai-proposed",
+                "ngs_extrapolated": True,
+                "source_ids": entry.get("citations", []),
+            }
+            added += 1
+        if added:
+            logger.info("proposer added %d novel inhibitor candidate(s)", added)
+        return added
+
     # ──────────────────────── ranking ────────────────────────
 
     def _rank_inhibitors(
@@ -263,6 +348,11 @@ class ExperimentDesigner:
             s = differential + 0.2 * vol + 0.2 * rem
             if name.lower() in kg_text:      # grounded in the literature KG -> preferred
                 s += 0.3
+            # Site-matched screening (Kim et al. 2026): inhibitor should passivate
+            # the sites the precursor uses on the NGS.
+            s += _site_match_score(props, spec.precursor)
+            if props.get("provenance") == "ai-proposed":
+                s -= 0.5
             if name.lower() == spec.inhibitor.lower():  # honor the committed choice first
                 s += 100.0
             return s
@@ -283,3 +373,33 @@ class ExperimentDesigner:
             if props.get("target_film", "").lower() == spec.target_film.lower():
                 return name, props["target_film"]
         return spec.precursor, spec.target_film
+
+
+def _literature_ea_ngs(props: dict) -> float | None:
+    """Extract a representative NGS Ea from site-resolved priors if present."""
+    sr = props.get("site_reactivity") or {}
+    sin = sr.get("SiN") or {}
+    for st in ("NH2", "NH_bridge", "OH"):
+        ea = (sin.get(st) or {}).get("Ea_eV")
+        if ea is not None:
+            return float(ea)
+    return None
+
+
+def _site_match_score(props: dict, precursor: str) -> float:
+    """Bonus when inhibitor passivates precursor-preferred NGS sites (Kim et al. 2026)."""
+    prefs = PRECURSOR_SITE_PREFS.get(precursor.upper(), ["NH2"])
+    sr = (props.get("site_reactivity") or {}).get("SiN") or {}
+    if not sr:
+        return 0.0
+    score = 0.0
+    for st in prefs:
+        p = sr.get(st) or sr.get(st.replace("_bridge", ""))
+        if not p:
+            continue
+        delta = p.get("deltaEr_eV", 0.0)
+        if delta < 0:
+            score += 0.25
+        elif delta > 0:
+            score -= 0.15  # endothermic at a precursor site -> penalise
+    return score
