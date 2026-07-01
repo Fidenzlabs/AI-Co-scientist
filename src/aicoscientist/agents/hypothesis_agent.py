@@ -25,13 +25,19 @@ from .schemas import HypothesisDrafts
 logger = logging.getLogger(__name__)
 
 _HYPO_SYSTEM = (
-    "You are a hypothesis-generation agent for an AI co-scientist. Using the provided "
-    "knowledge graph concepts/relations and citations, propose multiple DISTINCT, "
-    "competing, testable scientific hypotheses about the research idea. For each "
-    "hypothesis, give supporting evidence and contradicting evidence (each tied to "
-    "citation ids when possible), key assumptions, the related concepts it builds on, "
-    "a brief reasoning trace, a novelty assessment, and a calibrated confidence in "
-    "[0,1]. Hypotheses should genuinely differ in mechanism or claim."
+    "You are a hypothesis-generation agent for an AS-ALD co-scientist. Using the "
+    "provided knowledge graph concepts/relations and citations, propose multiple "
+    "DISTINCT, competing, testable INTERVENTION hypotheses for area-selective atomic "
+    "layer deposition. Each hypothesis must name a concrete scheme: an inhibitor that "
+    "selectively passivates the non-growth surface, an ALD precursor that grows the "
+    "target film on the growth surface, and a quantitative selectivity target at a "
+    "given oxide thickness, e.g. 'a carboxylic-acid small-molecule inhibitor "
+    "selectively passivates a-SiN -NH sites, enabling BDEAS-based SiOx growth on "
+    "a-SiO2 to >=90% selectivity at 10 nm'. For each hypothesis give supporting and "
+    "contradicting evidence (tied to citation ids when possible), key assumptions, the "
+    "related concepts it builds on, a brief reasoning trace, a novelty assessment, and "
+    "a calibrated confidence in [0,1]. Hypotheses should differ in inhibitor chemistry, "
+    "precursor, or target surface pairing."
 )
 
 
@@ -115,11 +121,17 @@ class HypothesisAgent:
 
         hypotheses: list[Hypothesis] = []
         templates = [
-            "{a} plays a causal role in {idea} via its interaction with {b}.",
-            "Modulating {a} is sufficient to influence the outcome in {idea}.",
-            "{a} and {b} act through a shared pathway relevant to {idea}.",
-            "The effect attributed to {a} in {idea} is actually mediated by {b}.",
-            "{a} is a viable intervention target for {idea}.",
+            "A {a}-based small-molecule inhibitor selectively passivates the non-growth "
+            "surface while {b} grows the target film on the growth surface, achieving "
+            ">=90% selectivity at 10 nm for {idea}.",
+            "Chemisorption of {a} on the non-growth surface blocks {b} precursor "
+            "adsorption, delaying nucleation enough to reach the selectivity target for {idea}.",
+            "{a} and {b} form a compatible inhibitor/precursor pair whose differential "
+            "adsorption drives area-selective growth in {idea}.",
+            "The selectivity in {idea} is governed by the differential blocking coverage "
+            "of {a} between the growth and non-growth surfaces rather than by {b} alone.",
+            "{a} is a viable non-growth-surface passivant enabling {b}-based selective "
+            "deposition in {idea}.",
         ]
         for i in range(min(n, max(1, len(concepts)))):
             a = concepts[i % len(concepts)] if concepts else None

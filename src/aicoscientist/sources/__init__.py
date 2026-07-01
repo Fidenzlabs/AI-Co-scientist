@@ -6,6 +6,7 @@ from .crossref import CrossrefClient
 from .mock import MockClient
 from .openalex import OpenAlexClient
 from .pubmed import PubMedClient
+from .seed_asald import SeedASALDClient
 from .semantic_scholar import SemanticScholarClient
 
 __all__ = [
@@ -15,5 +16,6 @@ __all__ = [
     "MockClient",
     "OpenAlexClient",
     "PubMedClient",
+    "SeedASALDClient",
     "SemanticScholarClient",
 ]

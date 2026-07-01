@@ -198,6 +198,27 @@ class ResearcherDecision(BaseModel):
     decided_at: str = Field(default_factory=_now)
 
 
+class ASALDSpec(BaseModel):
+    """Structured area-selective-ALD intervention committed by Layer 2.
+
+    This is the ``Hypothesis`` object of the reference in-silico protocol: it fixes the
+    growth / non-growth surfaces, the inhibitor + precursor scheme, and the target film,
+    thickness, and selectivity threshold that flow into the surface builder, the
+    selection agent, the reactivity engine, and the Layer-4 manuscript.
+    """
+
+    growth_surface: str = "a-SiO2"          # GS -- stays reactive
+    non_growth_surface: str = "a-SiN"       # NGS -- passivated by the inhibitor
+    inhibitor: str = "acetic acid"          # small-molecule inhibitor (SMI)
+    precursor: str = "BDEAS"                # ALD precursor for the target film
+    target_film: str = "SiOx"
+    target_thickness_nm: float = 10.0
+    target_selectivity: float = 0.90
+    provenance_refs: list[str] = Field(
+        default_factory=list, description="DOIs from the Layer-1 KG grounding this scheme"
+    )
+
+
 class OfficialHypothesis(BaseModel):
     """The official research hypothesis produced by Layer 2."""
 
@@ -206,6 +227,10 @@ class OfficialHypothesis(BaseModel):
     origin: ResearcherDecision
     state_graph: HypothesisStateGraph = Field(default_factory=HypothesisStateGraph)
     source_hypothesis_ids: list[str] = Field(default_factory=list)
+    asald: ASALDSpec | None = Field(
+        default=None,
+        description="Structured AS-ALD intervention parsed/derived from the committed hypothesis.",
+    )
     finalized_at: str = Field(default_factory=_now)
 
 
@@ -252,12 +277,30 @@ class ValidationMetric(BaseModel):
     note: str = ""
 
 
+class SurfaceFidelityReport(BaseModel):
+    """One generated slab's site-density gate report (Deliverable #1)."""
+
+    material: str
+    site_density_per_nm2: float
+    acceptance_band: list[float] = Field(default_factory=list)
+    n_sites: int = 0
+    area_nm2: float = 0.0
+    passed: bool = False
+    seed: int | None = None
+    note: str = ""
+
+
 class ValidationPlan(BaseModel):
-    """The in-silico experiment designed for a hypothesis (ReAct output)."""
+    """The in-silico experiment designed for a hypothesis (ReAct output).
+
+    For the AS-ALD co-scientist the plan carries the committed (inhibitor, precursor)
+    pair and its literature adsorption-energy priors inside ``data_spec``; the
+    ``surface_reactivity`` engine consumes it to run the ADR-009 protocol.
+    """
 
     domain: str = Field(
-        default="statistical",
-        description="Validation domain: statistical|cheminformatics|mechanistic|protein",
+        default="surface_reactivity",
+        description="Validation domain (AS-ALD co-scientist routes to surface_reactivity)",
     )
     method: str = Field(default="", description="Concrete method/test to run")
     rationale: str = ""
@@ -295,9 +338,12 @@ class Reflection(BaseModel):
 
 
 METHODOLOGY_CITATIONS = [
-    "Seal et al., AI Agents in Drug Discovery, arXiv:2510.27130",
-    "Pham et al., DrugPipe, https://github.com/HySonLab/DrugPipe",
-    "Schneuing et al., DiffSBDD, arXiv:2210.13695",
+    "Parsons & Clark, Area-selective deposition, Chem. Mater. 2020, 32, 4920",
+    "Tezsevin et al., Aniline SMI DFT+RSA, Langmuir 2023, 10.1021/acs.langmuir.2c03214",
+    "Area-Selective ALD of Al2O3 with MSA inhibitor, 10.1021/acs.chemmater.4c02902",
+    "Dehydroxylated amorphous silica slab models, PCCP 2025, 10.1039/D5CP01570G",
+    "Fine-tuning foundation MLIPs (barrier underestimation), arXiv:2502.15582",
+    "Seal et al., agentic Supervisor/Swarm/ReAct/Reflection, arXiv:2510.27130",
 ]
 
 

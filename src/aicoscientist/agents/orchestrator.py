@@ -21,10 +21,14 @@ from .schemas import DomainDecomposition
 logger = logging.getLogger(__name__)
 
 _DECOMPOSE_SYSTEM = (
-    "You are the orchestration agent of an AI co-scientist. Decompose a research idea "
-    "into distinct, complementary research domains (keyword clusters). Each domain "
-    "should target a different angle of the problem (e.g. mechanism, prior evidence, "
-    "methodology, competing explanations). Provide focused search keywords per domain."
+    "You are the orchestration agent of an AI co-scientist specialized in "
+    "area-selective atomic layer deposition (AS-ALD) surface chemistry. Decompose a "
+    "research idea into distinct, complementary research domains (keyword clusters). "
+    "Cover the AS-ALD problem structure: (a) amorphous surface models and site "
+    "densities, (b) small-molecule inhibitors / passivation chemistry, (c) ALD "
+    "precursors and film growth, (d) reaction mechanisms (chemisorption vs "
+    "physisorption, barriers) and measured selectivity. Provide focused search "
+    "keywords per domain using surface-chemistry vocabulary."
 )
 
 
@@ -67,10 +71,18 @@ class Orchestrator:
                 keywords.append(w)
         keywords = keywords or [idea]
         angles = [
-            ("Core mechanisms", keywords),
-            ("Prior evidence", keywords[:3] + ["clinical", "evidence"]),
-            ("Methodology", keywords[:2] + ["model", "method"]),
-            ("Competing explanations", keywords[:3] + ["alternative", "limitation"]),
+            ("Amorphous surface models", keywords[:2] + [
+                "amorphous silica surface model", "silanol density",
+                "amorphous silicon nitride surface", "site density"]),
+            ("Inhibitors and passivation", keywords[:2] + [
+                "small molecule inhibitor ALD", "area-selective deposition passivation",
+                "chemisorption inhibitor", "self-assembled monolayer blocking"]),
+            ("Precursors and film growth", keywords[:2] + [
+                "ALD precursor half-reaction", "BDEAS silicon oxide ALD",
+                "nucleation delay growth per cycle", "selective film growth"]),
+            ("Selectivity mechanisms", keywords[:2] + [
+                "adsorption energy DFT surface", "reaction barrier selectivity",
+                "chemisorption physisorption selectivity", "area-selective ALD selectivity"]),
         ]
         domains = []
         for name, kws in angles[:max_domains]:

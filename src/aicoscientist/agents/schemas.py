@@ -21,14 +21,36 @@ class DomainDecomposition(BaseModel):
 
 class ConceptOut(BaseModel):
     name: str
-    type: str = Field(default="concept", description="e.g. gene, drug, disease, method, concept")
-    description: str = ""
+    type: str = Field(
+        default="concept",
+        description=(
+            "Surface-chemistry entity type: surface | inhibitor | precursor | "
+            "mechanism | selectivity_result | film | site | method | concept"
+        ),
+    )
+    description: str = Field(
+        default="",
+        description=(
+            "Include the salient typed attributes when known, e.g. surface "
+            "{material, phase, site_type, site_density}; inhibitor {functional_group, "
+            "vapor_pressure, removability}; precursor {target_film}; mechanism "
+            "{chemisorb|physisorb, dE, Ea}; selectivity_result {film, thickness, %, method}."
+        ),
+    )
 
 
 class RelationOut(BaseModel):
     source: str = Field(description="source concept name")
-    target: str = Field(description="target concept name")
-    relation: str = Field(default="related_to", description="e.g. inhibits, treats, causes, associated_with")
+    target: str = Field(
+        description="target concept name",
+    )
+    relation: str = Field(
+        default="related_to",
+        description=(
+            "e.g. passivates, chemisorbs_on, physisorbs_on, blocks, grows_on, "
+            "inhibits_nucleation, selective_for, measured_by, associated_with"
+        ),
+    )
     description: str = ""
 
 

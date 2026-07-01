@@ -1,0 +1,72 @@
+{
+  "run_id": "demo",
+  "statement": "A precursor-based small-molecule inhibitor selectively passivates the non-growth surface while surface grows the target film on the growth surface, achieving >=90% selectivity at 10 nm for passivate a-SiN, grow SiOx-on-a-SiO2 to 90% selectivity at 10 nm.",
+  "origin": {
+    "action": "select",
+    "selected_ids": [
+      "H01"
+    ],
+    "statement": null,
+    "notes": "",
+    "decided_at": "2026-07-01T11:28:11.921498+00:00"
+  },
+  "state_graph": {
+    "supporting_evidence": [
+      {
+        "statement": "Literature links precursor to passivate a-SiN, grow SiOx-on-a-SiO2 to 90% selectivity at 10 nm.",
+        "stance": "supporting",
+        "source_ids": [
+          "mock:030c07b09e5d",
+          "mock:05c19ce21ee0",
+          "mock:0971be21e402"
+        ],
+        "strength": 0.6
+      }
+    ],
+    "contradicting_evidence": [
+      {
+        "statement": "Some sources do not isolate precursor's specific effect.",
+        "stance": "contradicting",
+        "source_ids": [
+          "mock:255973a5c3fe"
+        ],
+        "strength": 0.4
+      }
+    ],
+    "assumptions": [
+      "precursor is measurable in the relevant system."
+    ],
+    "related_concept_ids": [
+      "precursor",
+      "surface"
+    ],
+    "confidence": 0.491,
+    "references": [
+      "mock:030c07b09e5d",
+      "mock:05c19ce21ee0",
+      "mock:0971be21e402",
+      "mock:255973a5c3fe",
+      "mock:2e7bcae76b27"
+    ]
+  },
+  "source_hypothesis_ids": [
+    "H01"
+  ],
+  "asald": {
+    "growth_surface": "a-SiO2",
+    "non_growth_surface": "a-SiN",
+    "inhibitor": "acetic acid",
+    "precursor": "BDEAS",
+    "target_film": "SiOx",
+    "target_thickness_nm": 10.0,
+    "target_selectivity": 0.9,
+    "provenance_refs": [
+      "mock:030c07b09e5d",
+      "mock:05c19ce21ee0",
+      "mock:0971be21e402",
+      "mock:255973a5c3fe",
+      "mock:2e7bcae76b27"
+    ]
+  },
+  "finalized_at": "2026-07-01T11:28:11.921611+00:00"
+}

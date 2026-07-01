@@ -1,0 +1,62 @@
+{
+  "domain": "surface_reactivity",
+  "method": "AS-ALD differential-reactivity protocol (ADR-009): inhibitor adsorption screen on a-SiN (NGS) vs a-SiO2 (GS) over a gated surface ensemble, blocking coverage -> nucleation delay -> S(N).",
+  "rationale": "'acetic acid' (carboxylic acid) is predicted to chemisorb on the NGS and physisorb on the GS, giving a large differential blocking coverage.",
+  "reasoning_trace": [
+    "Retrieved 7 inhibitor candidates grounded in the KG (criteria: selection_criteria.md).",
+    "Ranked by differential adsorption + volatility + removability; selected 'acetic acid' (rank 1).",
+    "Paired with precursor 'BDEAS' for target film SiOx."
+  ],
+  "parameters": {},
+  "data_spec": {
+    "inhibitor": "acetic acid",
+    "precursor": "BDEAS",
+    "growth_surface": "a-SiO2",
+    "non_growth_surface": "a-SiN",
+    "target_film": "SiOx",
+    "target_thickness_nm": 10.0,
+    "target_selectivity": 0.9,
+    "dE_ngs_eV": -1.0,
+    "dE_gs_eV": -0.2,
+    "dE_prior_std": 0.08,
+    "literature_dE_ngs_eV": -1.0,
+    "temperature_K": 423.0,
+    "dose_ratio": 1.0,
+    "ensemble_n": 5,
+    "compute_tier": 0,
+    "provenance_refs": [
+      "mock:030c07b09e5d",
+      "mock:05c19ce21ee0",
+      "mock:0971be21e402",
+      "mock:255973a5c3fe",
+      "mock:2e7bcae76b27"
+    ]
+  },
+  "success_criteria": [
+    {
+      "metric": "S_at_target",
+      "operator": ">=",
+      "threshold": 0.9,
+      "description": "selectivity meets the 90% target"
+    },
+    {
+      "metric": "differential_blocking",
+      "operator": ">=",
+      "threshold": 0.5,
+      "description": "NGS is blocked substantially more than GS"
+    },
+    {
+      "metric": "dE_ngs_mean_eV",
+      "operator": "<",
+      "threshold": -0.7,
+      "description": "chemisorption on the non-growth surface"
+    }
+  ],
+  "assumptions": [
+    "Adsorption-energy priors are literature/xTB values; Tier-1 MLIP recomputes them within a single calculator/head/dtype.",
+    "Only chemisorbed, purge-surviving inhibitor blocks the precursor.",
+    "Selectivity is reported as mean +/- std over the surface ensemble."
+  ],
+  "seed": 42,
+  "iteration": 0
+}

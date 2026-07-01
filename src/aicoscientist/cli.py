@@ -166,7 +166,7 @@ def run(args: argparse.Namespace) -> int:
 
     console.print(
         Panel.fit(
-            f"[bold]AI Co-Scientist[/bold]\nidea: {args.idea}\n"
+            f"[bold]AS-ALD Co-Scientist[/bold]\nidea: {args.idea}\n"
             f"run id: {run_id}\nmode: {'offline (mock)' if args.offline else 'live sources'}\n"
             f"artifacts: {settings.artifacts_path / run_id}",
             border_style="magenta",
@@ -229,9 +229,16 @@ def run(args: argparse.Namespace) -> int:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="aicoscientist",
-        description="AI Co-Scientist — Layers 1 (deep research) & 2 (human-in-the-loop).",
+        description="AS-ALD Co-Scientist — Layers 1 (deep research) & 2 (human-in-the-loop).",
     )
-    parser.add_argument("--idea", required=True, help="The research idea to investigate.")
+    parser.add_argument(
+        "--idea",
+        required=True,
+        help=(
+            "The AS-ALD research idea, e.g. 'passivate a-SiN, grow SiOx-on-a-SiO2 to "
+            "90%% selectivity at 10 nm'."
+        ),
+    )
     parser.add_argument(
         "--offline",
         action="store_true",

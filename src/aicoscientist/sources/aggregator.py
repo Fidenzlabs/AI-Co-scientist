@@ -17,18 +17,23 @@ from .crossref import CrossrefClient
 from .mock import MockClient
 from .openalex import OpenAlexClient
 from .pubmed import PubMedClient
+from .seed_asald import SeedASALDClient
 from .semantic_scholar import SemanticScholarClient
 
 logger = logging.getLogger(__name__)
 
 
 class SourceAggregator:
-    """Queries every enabled source and returns a deduplicated citation list."""
+    """Queries every enabled source and returns a deduplicated citation list.
+
+    The AS-ALD anchor references (``SeedASALDClient``) are always included so every run
+    is grounded in the core surface-chemistry literature, online or offline.
+    """
 
     def __init__(self, offline: bool = False) -> None:
         self.offline = offline
         if offline:
-            self.clients = [MockClient()]
+            self.clients = [MockClient(), SeedASALDClient()]
         else:
             self.clients = [
                 ArxivClient(),
@@ -36,6 +41,7 @@ class SourceAggregator:
                 CrossrefClient(),
                 PubMedClient(),
                 SemanticScholarClient(),
+                SeedASALDClient(),
             ]
 
     @property

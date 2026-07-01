@@ -92,9 +92,11 @@ def run(args: argparse.Namespace) -> int:
 
     console.print(
         Panel.fit(
-            f"[bold]AI Co-Scientist — Layer 3 In-Silico Validation[/bold]\n"
+            f"[bold]AS-ALD Co-Scientist — Layer 3 In-Silico Validation[/bold]\n"
             f"run id: {args.run_id}\n"
             f"mode: {'offline (deterministic)' if args.offline else 'LLM-assisted'}\n"
+            f"compute tier: {settings.compute_tier} "
+            f"({'MLIP ' + settings.mlip_model if settings.compute_tier >= 1 else 'Tier-0 literature priors'})\n"
             f"max loop iterations: {settings.max_validation_iters}\n"
             f"artifacts: {run_dir}",
             border_style="magenta",

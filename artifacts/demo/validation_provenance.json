@@ -1,0 +1,25 @@
+{
+  "run_id": "demo",
+  "hypothesis": "A precursor-based small-molecule inhibitor selectively passivates the non-growth surface while surface grows the target film on the growth surface, achieving >=90% selectivity at 10 nm for passivate a-SiN, grow SiOx-on-a-SiO2 to 90% selectivity at 10 nm.",
+  "agentic_pattern": "Supervisor + Swarm + ReAct + Reflection",
+  "methodology_citations": [
+    "Parsons & Clark, Area-selective deposition, Chem. Mater. 2020, 32, 4920",
+    "Tezsevin et al., Aniline SMI DFT+RSA, Langmuir 2023, 10.1021/acs.langmuir.2c03214",
+    "Area-Selective ALD of Al2O3 with MSA inhibitor, 10.1021/acs.chemmater.4c02902",
+    "Dehydroxylated amorphous silica slab models, PCCP 2025, 10.1039/D5CP01570G",
+    "Fine-tuning foundation MLIPs (barrier underestimation), arXiv:2502.15582",
+    "Seal et al., agentic Supervisor/Swarm/ReAct/Reflection, arXiv:2510.27130"
+  ],
+  "iterations": 1,
+  "loop_trace": [
+    {
+      "iteration": 0,
+      "domain": "surface_reactivity",
+      "method": "AS-ALD differential-reactivity protocol (ADR-009): inhibitor adsorption screen on a-SiN (NGS) vs a-SiO2 (GS) over a gated surface ensemble, blocking coverage -> nucleation delay -> S(N).",
+      "verdict": "supported",
+      "confidence": 0.559,
+      "reflection": "accept"
+    }
+  ],
+  "generated_at": "2026-07-01T11:28:55.795626+00:00"
+}

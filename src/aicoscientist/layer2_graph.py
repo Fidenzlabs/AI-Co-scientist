@@ -12,6 +12,7 @@ import logging
 
 from langgraph.types import interrupt
 
+from .asald import derive_asald_spec
 from .layer1_graph import CoScientistState
 from .models import (
     Evidence,
@@ -96,6 +97,18 @@ def apply_decision(state: CoScientistState) -> dict:
             ),
             source_hypothesis_ids=[h.id for h in selected],
         )
+
+    # Derive the structured AS-ALD intervention (GS/NGS/inhibitor/precursor/target)
+    # that Layer 3's surface builder + reactivity engine consume.
+    concept_names = [
+        c.get("name", "")
+        for c in state.get("layer1_output", {}).get("concepts", [])
+    ]
+    official.asald = derive_asald_spec(
+        official.statement,
+        concept_names=concept_names,
+        provenance_refs=official.state_graph.references,
+    )
 
     ArtifactStore(run_id).save_official_hypothesis(official)
     logger.info("saved official hypothesis for run %s", run_id)

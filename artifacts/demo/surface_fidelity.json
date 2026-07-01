@@ -1,0 +1,152 @@
+{
+  "growth_surface": {
+    "material": "SiO2",
+    "n_surfaces": 5,
+    "target_density_per_nm2": 1.15,
+    "acceptance_band": [
+      0.35,
+      2.5
+    ],
+    "site_density_mean": 1.222,
+    "site_density_std": 0.122,
+    "n_passed": 5,
+    "all_passed": true,
+    "reports": [
+      {
+        "material": "SiO2",
+        "site_density_per_nm2": 1.222,
+        "acceptance_band": [
+          0.35,
+          2.5
+        ],
+        "n_sites": 11,
+        "area_nm2": 9.0,
+        "passed": true,
+        "seed": 42
+      },
+      {
+        "material": "SiO2",
+        "site_density_per_nm2": 1.222,
+        "acceptance_band": [
+          0.35,
+          2.5
+        ],
+        "n_sites": 11,
+        "area_nm2": 9.0,
+        "passed": true,
+        "seed": 43
+      },
+      {
+        "material": "SiO2",
+        "site_density_per_nm2": 1.444,
+        "acceptance_band": [
+          0.35,
+          2.5
+        ],
+        "n_sites": 13,
+        "area_nm2": 9.0,
+        "passed": true,
+        "seed": 44
+      },
+      {
+        "material": "SiO2",
+        "site_density_per_nm2": 1.111,
+        "acceptance_band": [
+          0.35,
+          2.5
+        ],
+        "n_sites": 10,
+        "area_nm2": 9.0,
+        "passed": true,
+        "seed": 45
+      },
+      {
+        "material": "SiO2",
+        "site_density_per_nm2": 1.111,
+        "acceptance_band": [
+          0.35,
+          2.5
+        ],
+        "n_sites": 10,
+        "area_nm2": 9.0,
+        "passed": true,
+        "seed": 46
+      }
+    ]
+  },
+  "non_growth_surface": {
+    "material": "SiN",
+    "n_surfaces": 5,
+    "target_density_per_nm2": 2.5,
+    "acceptance_band": [
+      1.0,
+      6.0
+    ],
+    "site_density_mean": 2.444,
+    "site_density_std": 0.433,
+    "n_passed": 5,
+    "all_passed": true,
+    "reports": [
+      {
+        "material": "SiN",
+        "site_density_per_nm2": 3.222,
+        "acceptance_band": [
+          1.0,
+          6.0
+        ],
+        "n_sites": 29,
+        "area_nm2": 9.0,
+        "passed": true,
+        "seed": 1042
+      },
+      {
+        "material": "SiN",
+        "site_density_per_nm2": 2.111,
+        "acceptance_band": [
+          1.0,
+          6.0
+        ],
+        "n_sites": 19,
+        "area_nm2": 9.0,
+        "passed": true,
+        "seed": 1043
+      },
+      {
+        "material": "SiN",
+        "site_density_per_nm2": 2.556,
+        "acceptance_band": [
+          1.0,
+          6.0
+        ],
+        "n_sites": 23,
+        "area_nm2": 9.0,
+        "passed": true,
+        "seed": 1044
+      },
+      {
+        "material": "SiN",
+        "site_density_per_nm2": 2.0,
+        "acceptance_band": [
+          1.0,
+          6.0
+        ],
+        "n_sites": 18,
+        "area_nm2": 9.0,
+        "passed": true,
+        "seed": 1045
+      },
+      {
+        "material": "SiN",
+        "site_density_per_nm2": 2.333,
+        "acceptance_band": [
+          1.0,
+          6.0
+        ],
+        "n_sites": 21,
+        "area_nm2": 9.0,
+        "passed": true,
+        "seed": 1046
+      }
+    ]
+  }
+}

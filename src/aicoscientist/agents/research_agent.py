@@ -18,11 +18,15 @@ from .schemas import ExtractionResult
 logger = logging.getLogger(__name__)
 
 _EXTRACT_SYSTEM = (
-    "You are a scientific knowledge extraction agent. Given a research idea and a set "
-    "of paper titles and abstracts, extract the key scientific concepts (entities such "
-    "as genes, drugs, diseases, methods, pathways, materials) and the directed "
-    "relationships between them (e.g. inhibits, treats, causes, associated_with). "
-    "Only extract concepts grounded in the provided text. Be concise and specific."
+    "You are a surface-chemistry knowledge extraction agent for an AS-ALD co-scientist. "
+    "Given a research idea and a set of paper titles and abstracts, extract the key "
+    "entities as typed concepts: surfaces (material/phase/site_type/site_density), "
+    "inhibitors (functional_group/vapor_pressure/removability), precursors "
+    "(target_film), mechanisms (chemisorb|physisorb, adsorption energy dE, barrier Ea), "
+    "and selectivity_results (film, thickness, % selectivity, method). Extract the "
+    "directed relationships between them (e.g. passivates, chemisorbs_on, "
+    "physisorbs_on, blocks, grows_on, selective_for, measured_by). Only extract "
+    "concepts grounded in the provided text. Be concise and specific."
 )
 
 _STOPWORDS = {

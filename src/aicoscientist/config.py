@@ -39,11 +39,47 @@ class Settings(BaseSettings):
     # Layer 3 — bounded reflection / closed-loop refinement budget
     max_validation_iters: int = Field(default=2, alias="MAX_VALIDATION_ITERS")
 
+    # Layer 3 — AS-ALD surface-reactivity engine (ADR-004/009)
+    compute_tier: int = Field(
+        default=0,
+        alias="COMPUTE_TIER",
+        description="0 = pure-python (literature/xTB dE), 1 = foundation MLIP, 2 = +spot-checks",
+    )
+    mlip_model: str = Field(default="mace-mp", alias="MLIP_MODEL")
+    mlip_device: str = Field(
+        default="auto", alias="MLIP_DEVICE", description="auto|cuda|mps|cpu"
+    )
+    ald_temperature_k: float = Field(default=423.0, alias="ALD_TEMPERATURE_K")
+    surface_ensemble_n: int = Field(
+        default=5, alias="SURFACE_ENSEMBLE_N", description="slabs per surface condition"
+    )
+    selection_criteria_path: str = Field(
+        default="selection_criteria.md", alias="SELECTION_CRITERIA_PATH"
+    )
+
     @property
     def artifacts_path(self) -> Path:
         path = Path(self.artifacts_dir)
         path.mkdir(parents=True, exist_ok=True)
         return path
+
+    @property
+    def resolved_mlip_device(self) -> str:
+        """Resolve 'auto' to the best available torch device.
+
+        MACE energy differences require float64, which the MPS backend does not
+        support, so Apple-silicon runs fall back to CPU for the MLIP tier.
+        """
+        if self.mlip_device != "auto":
+            return self.mlip_device
+        try:
+            import torch
+
+            if torch.cuda.is_available():
+                return "cuda"
+        except Exception:  # noqa: BLE001
+            pass
+        return "cpu"
 
     @property
     def user_agent(self) -> str:

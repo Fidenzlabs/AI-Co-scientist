@@ -1,0 +1,615 @@
+{
+  "citations": [
+    {
+      "id": "mock:f99279d4270e",
+      "source": "mock",
+      "title": "Area-selective deposition: aniline inhibitor with BDEAS precursor on amine -NH sites",
+      "authors": [
+        "AuthorF992",
+        "Coauthor79D4"
+      ],
+      "year": 2019,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/f99279d4270e",
+      "abstract": "This synthetic abstract reports that the inhibitor aniline passivates the amine -NH sites via chemisorption on the non-growth surface, while the BDEAS precursor grows the target film on the growth surface. Selectivity is driven by chemisorption on the non-growth surface; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 343
+    },
+    {
+      "id": "mock:62b7adf56bba",
+      "source": "mock",
+      "title": "Area-selective deposition: pivalic acid inhibitor with TDMAT precursor on a-SiN non-growth surface",
+      "authors": [
+        "Author62B7",
+        "CoauthorADF5"
+      ],
+      "year": 2020,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/62b7adf56bba",
+      "abstract": "This synthetic abstract reports that the inhibitor pivalic acid passivates the a-SiN non-growth surface via differential adsorption energy, while the TDMAT precursor grows the target film on the growth surface. Selectivity is driven by differential adsorption energy; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 438
+    },
+    {
+      "id": "mock:47fcea5e8200",
+      "source": "mock",
+      "title": "Area-selective deposition: methanesulfonic acid inhibitor with BDEAS precursor on amine -NH sites",
+      "authors": [
+        "Author47FC",
+        "CoauthorEA5E"
+      ],
+      "year": 2025,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/47fcea5e8200",
+      "abstract": "This synthetic abstract reports that the inhibitor methanesulfonic acid passivates the amine -NH sites via nucleation delay, while the BDEAS precursor grows the target film on the growth surface. Selectivity is driven by nucleation delay; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 46
+    },
+    {
+      "id": "mock:d18205b6684b",
+      "source": "mock",
+      "title": "Area-selective deposition: DMATMS inhibitor with TDMAT precursor on a-SiO2 growth surface",
+      "authors": [
+        "AuthorD182",
+        "Coauthor05B6"
+      ],
+      "year": 2019,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/d18205b6684b",
+      "abstract": "This synthetic abstract reports that the inhibitor DMATMS passivates the a-SiO2 growth surface via differential adsorption energy, while the TDMAT precursor grows the target film on the growth surface. Selectivity is driven by differential adsorption energy; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 80
+    },
+    {
+      "id": "mock:fcc3ce8076a8",
+      "source": "mock",
+      "title": "Area-selective deposition: methanesulfonic acid inhibitor with TMA precursor on silanol sites",
+      "authors": [
+        "AuthorFCC3",
+        "CoauthorCE80"
+      ],
+      "year": 2022,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/fcc3ce8076a8",
+      "abstract": "This synthetic abstract reports that the inhibitor methanesulfonic acid passivates the silanol sites via chemisorption on the non-growth surface, while the TMA precursor grows the target film on the growth surface. Selectivity is driven by chemisorption on the non-growth surface; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 132
+    },
+    {
+      "id": "seed_asald:parsons-clark-2020",
+      "source": "seed_asald",
+      "title": "Area-selective deposition: fundamentals, applications, and future outlook",
+      "authors": [
+        "Parsons",
+        "Clark"
+      ],
+      "year": 2020,
+      "venue": "Chemistry of Materials",
+      "doi": "10.1021/acs.chemmater.0c00722",
+      "url": "https://doi.org/10.1021/acs.chemmater.0c00722",
+      "abstract": "Review of area-selective deposition. Selectivity arises from dosing a molecular inhibitor that chemisorbs on the non-growth surface and blocks the ALD precursor there, while the growth surface stays reactive. The film nucleates on the growth surface and is delayed on the non-growth surface; that nucleation delay is the selectivity.",
+      "citation_count": null
+    },
+    {
+      "id": "seed_asald:tezsevin-2023",
+      "source": "seed_asald",
+      "title": "Computational investigation of precursor blocking by an aniline small-molecule inhibitor",
+      "authors": [
+        "Tezsevin",
+        "Mackus"
+      ],
+      "year": 2023,
+      "venue": "Langmuir",
+      "doi": "10.1021/acs.langmuir.2c03214",
+      "url": "https://doi.org/10.1021/acs.langmuir.2c03214",
+      "abstract": "Aniline chemisorbs on Ru/Co non-growth areas but only physisorbs on the SiO2 growth area. DFT adsorption energies plus random sequential adsorption coverage explain the selective blocking: strong chemisorption on the non-growth surface, weak physisorption on the growth surface.",
+      "citation_count": null
+    },
+    {
+      "id": "seed_asald:msa-al2o3-2024",
+      "source": "seed_asald",
+      "title": "Area-selective ALD of Al2O3 using a methanesulfonic acid inhibitor",
+      "authors": [
+        "Author",
+        "Coauthor"
+      ],
+      "year": 2024,
+      "venue": "Chemistry of Materials",
+      "doi": "10.1021/acs.chemmater.4c02902",
+      "url": "https://doi.org/10.1021/acs.chemmater.4c02902",
+      "abstract": "Methanesulfonic acid shows reaction barriers on SiO2 an order of magnitude higher than on Cu, giving >97% selective Al2O3 growth. Selectivity is dominated by the differential precursor half-reaction barrier.",
+      "citation_count": null
+    },
+    {
+      "id": "seed_asald:silica-silanol-2025",
+      "source": "seed_asald",
+      "title": "Ground-up generation of periodic slab models of dehydroxylated amorphous silica",
+      "authors": [
+        "Author"
+      ],
+      "year": 2025,
+      "venue": "Physical Chemistry Chemical Physics",
+      "doi": "10.1039/D5CP01570G",
+      "url": "https://doi.org/10.1039/D5CP01570G",
+      "abstract": "Dehydroxylated silica converges to ~1.15 OH/nm2 (Zhuravlev), with controlled protocols in the 0.35-2.0 OH/nm2 band. Computed reactivity is highly sensitive to the presumed surface site density, so slab models must be gated against experimental silanol densities.",
+      "citation_count": null
+    },
+    {
+      "id": "seed_asald:jpcc-silica-2021",
+      "source": "seed_asald",
+      "title": "Amorphous silica slab models with variable roughness and silanol density",
+      "authors": [
+        "Author"
+      ],
+      "year": 2021,
+      "venue": "Journal of Physical Chemistry C",
+      "doi": "10.1021/acs.jpcc.1c06580",
+      "url": "https://doi.org/10.1021/acs.jpcc.1c06580",
+      "abstract": "Melt-cleave-quench-functionalize protocol builds amorphous silica slabs with controlled roughness and silanol density using the BKS potential.",
+      "citation_count": null
+    },
+    {
+      "id": "seed_asald:mace-mad-surf-2026",
+      "source": "seed_asald",
+      "title": "MAD-SURF: fine-tuning MACE-MPA-0 for molecular adsorption on surfaces",
+      "authors": [
+        "Author"
+      ],
+      "year": 2026,
+      "venue": "arXiv:2601.18852",
+      "doi": null,
+      "url": null,
+      "abstract": "Fine-tuning MACE-MPA-0 markedly improves adsorption geometry fidelity for molecules on surfaces; foundation MLIPs estimate adsorption energies at a fraction of DFT cost.",
+      "citation_count": null
+    },
+    {
+      "id": "seed_asald:mlip-barrier-2025",
+      "source": "seed_asald",
+      "title": "Fine-tuning foundation MLIPs with frozen transfer learning",
+      "authors": [
+        "Author"
+      ],
+      "year": 2025,
+      "venue": "arXiv:2502.15582",
+      "doi": null,
+      "url": null,
+      "abstract": "Foundation MLIPs systematically underestimate reaction barriers (minimum-energy-path heights). Absolute barriers should be treated as lower bounds and calibrated against literature DFT.",
+      "citation_count": null
+    },
+    {
+      "id": "mock:3aac389187b2",
+      "source": "mock",
+      "title": "Area-selective deposition: octadecylphosphonic acid inhibitor with HCDS precursor on a-SiN non-growth surface",
+      "authors": [
+        "Author3AAC",
+        "Coauthor3891"
+      ],
+      "year": 2020,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/3aac389187b2",
+      "abstract": "This synthetic abstract reports that the inhibitor octadecylphosphonic acid passivates the a-SiN non-growth surface via chemisorption on the non-growth surface, while the HCDS precursor grows the target film on the growth surface. Selectivity is driven by chemisorption on the non-growth surface; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 255
+    },
+    {
+      "id": "mock:e0a5bc798596",
+      "source": "mock",
+      "title": "Area-selective deposition: octadecylphosphonic acid inhibitor with DIPAS precursor on a-SiN non-growth surface",
+      "authors": [
+        "AuthorE0A5",
+        "CoauthorBC79"
+      ],
+      "year": 2018,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/e0a5bc798596",
+      "abstract": "This synthetic abstract reports that the inhibitor octadecylphosphonic acid passivates the a-SiN non-growth surface via precursor half-reaction barrier, while the DIPAS precursor grows the target film on the growth surface. Selectivity is driven by precursor half-reaction barrier; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 151
+    },
+    {
+      "id": "mock:926247b6bf7c",
+      "source": "mock",
+      "title": "Area-selective deposition: aniline inhibitor with DIPAS precursor on silanol sites",
+      "authors": [
+        "Author9262",
+        "Coauthor47B6"
+      ],
+      "year": 2020,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/926247b6bf7c",
+      "abstract": "This synthetic abstract reports that the inhibitor aniline passivates the silanol sites via differential adsorption energy, while the DIPAS precursor grows the target film on the growth surface. Selectivity is driven by differential adsorption energy; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 72
+    },
+    {
+      "id": "mock:030c07b09e5d",
+      "source": "mock",
+      "title": "Area-selective deposition: pivalic acid inhibitor with BDEAS precursor on a-SiO2 growth surface",
+      "authors": [
+        "Author030C",
+        "Coauthor07B0"
+      ],
+      "year": 2021,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/030c07b09e5d",
+      "abstract": "This synthetic abstract reports that the inhibitor pivalic acid passivates the a-SiO2 growth surface via chemisorption on the non-growth surface, while the BDEAS precursor grows the target film on the growth surface. Selectivity is driven by chemisorption on the non-growth surface; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 192
+    },
+    {
+      "id": "mock:0971be21e402",
+      "source": "mock",
+      "title": "Area-selective deposition: acetic acid inhibitor with HCDS precursor on a-SiN non-growth surface",
+      "authors": [
+        "Author0971",
+        "CoauthorBE21"
+      ],
+      "year": 2019,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/0971be21e402",
+      "abstract": "This synthetic abstract reports that the inhibitor acetic acid passivates the a-SiN non-growth surface via chemisorption on the non-growth surface, while the HCDS precursor grows the target film on the growth surface. Selectivity is driven by chemisorption on the non-growth surface; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 319
+    },
+    {
+      "id": "mock:9594e6907e3e",
+      "source": "mock",
+      "title": "Area-selective deposition: methanesulfonic acid inhibitor with HCDS precursor on amine -NH sites",
+      "authors": [
+        "Author9594",
+        "CoauthorE690"
+      ],
+      "year": 2023,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/9594e6907e3e",
+      "abstract": "This synthetic abstract reports that the inhibitor methanesulfonic acid passivates the amine -NH sites via chemisorption on the non-growth surface, while the HCDS precursor grows the target film on the growth surface. Selectivity is driven by chemisorption on the non-growth surface; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 382
+    },
+    {
+      "id": "mock:d41b6b6f4e2d",
+      "source": "mock",
+      "title": "Area-selective deposition: pivalic acid inhibitor with DIPAS precursor on amine -NH sites",
+      "authors": [
+        "AuthorD41B",
+        "Coauthor6B6F"
+      ],
+      "year": 2022,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/d41b6b6f4e2d",
+      "abstract": "This synthetic abstract reports that the inhibitor pivalic acid passivates the amine -NH sites via differential adsorption energy, while the DIPAS precursor grows the target film on the growth surface. Selectivity is driven by differential adsorption energy; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 438
+    },
+    {
+      "id": "mock:a9d122132677",
+      "source": "mock",
+      "title": "Area-selective deposition: octadecylphosphonic acid inhibitor with BDEAS precursor on a-SiN non-growth surface",
+      "authors": [
+        "AuthorA9D1",
+        "Coauthor2213"
+      ],
+      "year": 2019,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/a9d122132677",
+      "abstract": "This synthetic abstract reports that the inhibitor octadecylphosphonic acid passivates the a-SiN non-growth surface via physisorption on the growth surface, while the BDEAS precursor grows the target film on the growth surface. Selectivity is driven by physisorption on the growth surface; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 346
+    },
+    {
+      "id": "mock:ea080107e28a",
+      "source": "mock",
+      "title": "Area-selective deposition: aniline inhibitor with TMA precursor on a-SiO2 growth surface",
+      "authors": [
+        "AuthorEA08",
+        "Coauthor0107"
+      ],
+      "year": 2020,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/ea080107e28a",
+      "abstract": "This synthetic abstract reports that the inhibitor aniline passivates the a-SiO2 growth surface via precursor half-reaction barrier, while the TMA precursor grows the target film on the growth surface. Selectivity is driven by precursor half-reaction barrier; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 128
+    },
+    {
+      "id": "mock:5537079ab1cb",
+      "source": "mock",
+      "title": "Area-selective deposition: aniline inhibitor with BDEAS precursor on a-SiO2 growth surface",
+      "authors": [
+        "Author5537",
+        "Coauthor079A"
+      ],
+      "year": 2023,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/5537079ab1cb",
+      "abstract": "This synthetic abstract reports that the inhibitor aniline passivates the a-SiO2 growth surface via chemisorption on the non-growth surface, while the BDEAS precursor grows the target film on the growth surface. Selectivity is driven by chemisorption on the non-growth surface; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 380
+    },
+    {
+      "id": "mock:ff1908afcb8a",
+      "source": "mock",
+      "title": "Area-selective deposition: acetic acid inhibitor with DIPAS precursor on a-SiO2 growth surface",
+      "authors": [
+        "AuthorFF19",
+        "Coauthor08AF"
+      ],
+      "year": 2025,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/ff1908afcb8a",
+      "abstract": "This synthetic abstract reports that the inhibitor acetic acid passivates the a-SiO2 growth surface via chemisorption on the non-growth surface, while the DIPAS precursor grows the target film on the growth surface. Selectivity is driven by chemisorption on the non-growth surface; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 400
+    },
+    {
+      "id": "mock:8df92b96055d",
+      "source": "mock",
+      "title": "Area-selective deposition: pivalic acid inhibitor with BDEAS precursor on a-SiN non-growth surface",
+      "authors": [
+        "Author8DF9",
+        "Coauthor2B96"
+      ],
+      "year": 2023,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/8df92b96055d",
+      "abstract": "This synthetic abstract reports that the inhibitor pivalic acid passivates the a-SiN non-growth surface via chemisorption on the non-growth surface, while the BDEAS precursor grows the target film on the growth surface. Selectivity is driven by chemisorption on the non-growth surface; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 486
+    },
+    {
+      "id": "mock:2e7bcae76b27",
+      "source": "mock",
+      "title": "Area-selective deposition: methanesulfonic acid inhibitor with TDMAT precursor on silanol sites",
+      "authors": [
+        "Author2E7B",
+        "CoauthorCAE7"
+      ],
+      "year": 2024,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/2e7bcae76b27",
+      "abstract": "This synthetic abstract reports that the inhibitor methanesulfonic acid passivates the silanol sites via precursor half-reaction barrier, while the TDMAT precursor grows the target film on the growth surface. Selectivity is driven by precursor half-reaction barrier; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 480
+    },
+    {
+      "id": "mock:b8f93159e166",
+      "source": "mock",
+      "title": "Area-selective deposition: DMATMS inhibitor with HCDS precursor on a-SiN non-growth surface",
+      "authors": [
+        "AuthorB8F9",
+        "Coauthor3159"
+      ],
+      "year": 2018,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/b8f93159e166",
+      "abstract": "This synthetic abstract reports that the inhibitor DMATMS passivates the a-SiN non-growth surface via physisorption on the growth surface, while the HCDS precursor grows the target film on the growth surface. Selectivity is driven by physisorption on the growth surface; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 487
+    },
+    {
+      "id": "mock:6e39836363fd",
+      "source": "mock",
+      "title": "Area-selective deposition: pivalic acid inhibitor with BDEAS precursor on a-SiO2 growth surface",
+      "authors": [
+        "Author6E39",
+        "Coauthor8363"
+      ],
+      "year": 2024,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/6e39836363fd",
+      "abstract": "This synthetic abstract reports that the inhibitor pivalic acid passivates the a-SiO2 growth surface via chemisorption on the non-growth surface, while the BDEAS precursor grows the target film on the growth surface. Selectivity is driven by chemisorption on the non-growth surface; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 420
+    },
+    {
+      "id": "mock:255973a5c3fe",
+      "source": "mock",
+      "title": "Area-selective deposition: pivalic acid inhibitor with DIPAS precursor on amine -NH sites",
+      "authors": [
+        "Author2559",
+        "Coauthor73A5"
+      ],
+      "year": 2023,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/255973a5c3fe",
+      "abstract": "This synthetic abstract reports that the inhibitor pivalic acid passivates the amine -NH sites via nucleation delay, while the DIPAS precursor grows the target film on the growth surface. Selectivity is driven by nucleation delay; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 431
+    },
+    {
+      "id": "mock:c9179a147440",
+      "source": "mock",
+      "title": "Area-selective deposition: acetic acid inhibitor with HCDS precursor on a-SiO2 growth surface",
+      "authors": [
+        "AuthorC917",
+        "Coauthor9A14"
+      ],
+      "year": 2019,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/c9179a147440",
+      "abstract": "This synthetic abstract reports that the inhibitor acetic acid passivates the a-SiO2 growth surface via precursor half-reaction barrier, while the HCDS precursor grows the target film on the growth surface. Selectivity is driven by precursor half-reaction barrier; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 377
+    },
+    {
+      "id": "mock:bfb8110910a9",
+      "source": "mock",
+      "title": "Area-selective deposition: DMATMS inhibitor with HCDS precursor on a-SiO2 growth surface",
+      "authors": [
+        "AuthorBFB8",
+        "Coauthor1109"
+      ],
+      "year": 2025,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/bfb8110910a9",
+      "abstract": "This synthetic abstract reports that the inhibitor DMATMS passivates the a-SiO2 growth surface via chemisorption on the non-growth surface, while the HCDS precursor grows the target film on the growth surface. Selectivity is driven by chemisorption on the non-growth surface; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 445
+    },
+    {
+      "id": "mock:05c19ce21ee0",
+      "source": "mock",
+      "title": "Area-selective deposition: acetic acid inhibitor with BDEAS precursor on a-SiO2 growth surface",
+      "authors": [
+        "Author05C1",
+        "Coauthor9CE2"
+      ],
+      "year": 2023,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/05c19ce21ee0",
+      "abstract": "This synthetic abstract reports that the inhibitor acetic acid passivates the a-SiO2 growth surface via nucleation delay, while the BDEAS precursor grows the target film on the growth surface. Selectivity is driven by nucleation delay; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 97
+    },
+    {
+      "id": "mock:8de299140626",
+      "source": "mock",
+      "title": "Area-selective deposition: pivalic acid inhibitor with TDMAT precursor on a-SiO2 growth surface",
+      "authors": [
+        "Author8DE2",
+        "Coauthor9914"
+      ],
+      "year": 2023,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/8de299140626",
+      "abstract": "This synthetic abstract reports that the inhibitor pivalic acid passivates the a-SiO2 growth surface via chemisorption on the non-growth surface, while the TDMAT precursor grows the target film on the growth surface. Selectivity is driven by chemisorption on the non-growth surface; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 125
+    },
+    {
+      "id": "mock:9d136ef0b2ce",
+      "source": "mock",
+      "title": "Area-selective deposition: octadecylphosphonic acid inhibitor with BDEAS precursor on amine -NH sites",
+      "authors": [
+        "Author9D13",
+        "Coauthor6EF0"
+      ],
+      "year": 2023,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/9d136ef0b2ce",
+      "abstract": "This synthetic abstract reports that the inhibitor octadecylphosphonic acid passivates the amine -NH sites via nucleation delay, while the BDEAS precursor grows the target film on the growth surface. Selectivity is driven by nucleation delay; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 310
+    },
+    {
+      "id": "mock:623e4c5571a6",
+      "source": "mock",
+      "title": "Area-selective deposition: methanesulfonic acid inhibitor with TMA precursor on silanol sites",
+      "authors": [
+        "Author623E",
+        "Coauthor4C55"
+      ],
+      "year": 2020,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/623e4c5571a6",
+      "abstract": "This synthetic abstract reports that the inhibitor methanesulfonic acid passivates the silanol sites via chemisorption on the non-growth surface, while the TMA precursor grows the target film on the growth surface. Selectivity is driven by chemisorption on the non-growth surface; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 496
+    },
+    {
+      "id": "mock:479281fc43be",
+      "source": "mock",
+      "title": "Area-selective deposition: pivalic acid inhibitor with BDEAS precursor on a-SiO2 growth surface",
+      "authors": [
+        "Author4792",
+        "Coauthor81FC"
+      ],
+      "year": 2025,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/479281fc43be",
+      "abstract": "This synthetic abstract reports that the inhibitor pivalic acid passivates the a-SiO2 growth surface via chemisorption on the non-growth surface, while the BDEAS precursor grows the target film on the growth surface. Selectivity is driven by chemisorption on the non-growth surface; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 344
+    },
+    {
+      "id": "mock:efe66f6848df",
+      "source": "mock",
+      "title": "Area-selective deposition: pivalic acid inhibitor with DIPAS precursor on amine -NH sites",
+      "authors": [
+        "AuthorEFE6",
+        "Coauthor6F68"
+      ],
+      "year": 2025,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/efe66f6848df",
+      "abstract": "This synthetic abstract reports that the inhibitor pivalic acid passivates the amine -NH sites via differential adsorption energy, while the DIPAS precursor grows the target film on the growth surface. Selectivity is driven by differential adsorption energy; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 186
+    },
+    {
+      "id": "mock:8bce2172077b",
+      "source": "mock",
+      "title": "Area-selective deposition: aniline inhibitor with TMA precursor on a-SiN non-growth surface",
+      "authors": [
+        "Author8BCE",
+        "Coauthor2172"
+      ],
+      "year": 2021,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/8bce2172077b",
+      "abstract": "This synthetic abstract reports that the inhibitor aniline passivates the a-SiN non-growth surface via chemisorption on the non-growth surface, while the TMA precursor grows the target film on the growth surface. Selectivity is driven by chemisorption on the non-growth surface; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 298
+    },
+    {
+      "id": "mock:42c2b65ed3ae",
+      "source": "mock",
+      "title": "Area-selective deposition: octadecylphosphonic acid inhibitor with HCDS precursor on a-SiN non-growth surface",
+      "authors": [
+        "Author42C2",
+        "CoauthorB65E"
+      ],
+      "year": 2020,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/42c2b65ed3ae",
+      "abstract": "This synthetic abstract reports that the inhibitor octadecylphosphonic acid passivates the a-SiN non-growth surface via physisorption on the growth surface, while the HCDS precursor grows the target film on the growth surface. Selectivity is driven by physisorption on the growth surface; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 115
+    },
+    {
+      "id": "mock:b8ed1f18251f",
+      "source": "mock",
+      "title": "Area-selective deposition: DMATMS inhibitor with BDEAS precursor on a-SiO2 growth surface",
+      "authors": [
+        "AuthorB8ED",
+        "Coauthor1F18"
+      ],
+      "year": 2018,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/b8ed1f18251f",
+      "abstract": "This synthetic abstract reports that the inhibitor DMATMS passivates the a-SiO2 growth surface via nucleation delay, while the BDEAS precursor grows the target film on the growth surface. Selectivity is driven by nucleation delay; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 293
+    },
+    {
+      "id": "mock:e1e449b9aebb",
+      "source": "mock",
+      "title": "Area-selective deposition: pivalic acid inhibitor with BDEAS precursor on silanol sites",
+      "authors": [
+        "AuthorE1E4",
+        "Coauthor49B9"
+      ],
+      "year": 2019,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/e1e449b9aebb",
+      "abstract": "This synthetic abstract reports that the inhibitor pivalic acid passivates the silanol sites via physisorption on the growth surface, while the BDEAS precursor grows the target film on the growth surface. Selectivity is driven by physisorption on the growth surface; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 152
+    },
+    {
+      "id": "mock:961a5ad1bd52",
+      "source": "mock",
+      "title": "Area-selective deposition: methanesulfonic acid inhibitor with TDMAT precursor on silanol sites",
+      "authors": [
+        "Author961A",
+        "Coauthor5AD1"
+      ],
+      "year": 2024,
+      "venue": "Journal of Synthetic Surface Chemistry",
+      "doi": null,
+      "url": "https://example.org/961a5ad1bd52",
+      "abstract": "This synthetic abstract reports that the inhibitor methanesulfonic acid passivates the silanol sites via nucleation delay, while the TDMAT precursor grows the target film on the growth surface. Selectivity is driven by nucleation delay; measured selectivity approaches the target at 10 nm oxide thickness.",
+      "citation_count": 421
+    }
+  ]
+}

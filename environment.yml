@@ -1,0 +1,29 @@
+# Locked conda environment for the AS-ALD Co-Scientist (ADR-008).
+# Tier-0 + Tier-1: create with `conda env create -f environment.yml`, then
+# `pip install -e .` from the repo root. On Apple silicon the MLIP tier runs on CPU
+# (MACE float64 is unsupported on MPS); on Colab use a CUDA runtime for the MLIP tier.
+name: asald-coscientist
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - numpy>=1.26
+  - matplotlib>=3.8
+  - pip
+  - pip:
+      - langgraph>=0.2.50
+      - langchain>=0.3.0
+      - langchain-core>=0.3.0
+      - langgraph-checkpoint-sqlite>=2.0.0
+      - pydantic>=2.7.0
+      - pydantic-settings>=2.3.0
+      - networkx>=3.2
+      - httpx>=0.27.0
+      - python-dotenv>=1.0.1
+      - rich>=13.7.0
+      - langchain-openai>=0.2.0
+      # Optional Tier-1 foundation-MLIP surface reactivity:
+      - ase>=3.23
+      - mace-torch>=0.3.6
+      # Optional Tier-2 semi-empirical calibration:
+      # - tblite>=0.3.0

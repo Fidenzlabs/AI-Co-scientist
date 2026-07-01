@@ -1,0 +1,16 @@
+{
+  "num_concepts": 12,
+  "num_relations": 11,
+  "num_citations": 38,
+  "domains": [
+    "Amorphous surface models",
+    "Inhibitors and passivation",
+    "Precursors and film growth",
+    "Selectivity mechanisms"
+  ],
+  "density": 0.0833,
+  "concept_types": {
+    "concept": 12
+  },
+  "generated_at": "2026-07-01T11:28:11.726957+00:00"
+}
