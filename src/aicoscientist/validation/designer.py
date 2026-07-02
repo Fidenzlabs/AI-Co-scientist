@@ -259,6 +259,26 @@ class ExperimentDesigner:
             + ".",
             f"Paired with precursor '{precursor}' for target film {target_film}.",
         ]
+        # Coherence guard: the committed inhibitor should resolve to a real candidate. If
+        # it does not (e.g. the hypothesis parser failed to recognize the named molecule),
+        # the "honor committed choice" pin never fires and a DIFFERENT molecule gets tested
+        # -- flag it loudly rather than silently swapping (the aniline-for-ETS bug).
+        committed = (spec.inhibitor or "").strip().lower()
+        known_keys = {k.lower() for k in library.get("inhibitors", {})}
+        if committed and committed not in known_keys:
+            logger.warning(
+                "committed inhibitor '%s' is not a known candidate; testing '%s' instead",
+                spec.inhibitor, inhibitor,
+            )
+            trace.append(
+                f"WARNING: committed inhibitor '{spec.inhibitor}' did not resolve to a "
+                f"known candidate (hypothesis parse may have failed); tested '{inhibitor}' "
+                f"by ranking instead."
+            )
+        elif committed and inhibitor.lower() != committed and not planner_rationale:
+            trace.append(
+                f"NOTE: committed '{spec.inhibitor}' but ranking selected '{inhibitor}'."
+            )
         if planner_rationale:
             trace.append(
                 f"AI planner (max tier {settings.ai_planner_max_tier}): tier {tier} -- "
@@ -440,19 +460,31 @@ def _literature_ea_ngs(props: dict) -> float | None:
 
 
 def _site_match_score(props: dict, precursor: str) -> float:
-    """Bonus when inhibitor passivates precursor-preferred NGS sites (Kim et al. 2026)."""
-    prefs = PRECURSOR_SITE_PREFS.get(precursor.upper(), ["NH2"])
-    sr = (props.get("site_reactivity") or {}).get("SiN") or {}
+    """Kim et al. 2026 site match for 'passivate the NGS, grow on the GS'.
+
+    A good inhibitor (a) chemisorbs on the NON-growth surface's amine sites (SiN -NH2 /
+    -NH), passivating it, and (b) does NOT react the growth sites the precursor needs
+    (SiO2 -OH for BDEAS-type), which would kill selectivity. Both terms are scaled by the
+    reaction exothermicity (deltaEr) so, e.g., ETS (weak on SiO2-OH) clearly beats DMATMS
+    (strongly reacts SiO2-OH). The previous version searched for the precursor's -OH site
+    inside the SiN dict, so the bonus was always 0 for BDEAS and the screen never worked.
+    """
+    sr = props.get("site_reactivity") or {}
     if not sr:
         return 0.0
     score = 0.0
+    # (a) reward passivating the NGS (SiN) at its amine sites -- more exothermic is better
+    sin = sr.get("SiN") or {}
+    for st in ("NH2", "NH_bridge"):
+        d = (sin.get(st) or {}).get("deltaEr_eV")
+        if d is not None and d < 0:
+            score += min(0.4, -0.4 * d)
+    # (b) penalize reacting the growth sites the precursor uses (SiO2 -OH) -- this blocks
+    # the surface we want to grow on, so a strong exothermic dEr there is disqualifying.
+    prefs = PRECURSOR_SITE_PREFS.get(precursor.upper(), ["OH"])
+    sio2 = sr.get("SiO2") or {}
     for st in prefs:
-        p = sr.get(st) or sr.get(st.replace("_bridge", ""))
-        if not p:
-            continue
-        delta = p.get("deltaEr_eV", 0.0)
-        if delta < 0:
-            score += 0.25
-        elif delta > 0:
-            score -= 0.15  # endothermic at a precursor site -> penalise
+        d = (sio2.get(st) or sio2.get(st.replace("_bridge", "")) or {}).get("deltaEr_eV")
+        if d is not None and d < 0:
+            score -= min(0.6, -0.6 * d)
     return score

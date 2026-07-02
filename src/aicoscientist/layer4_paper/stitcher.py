@@ -58,14 +58,49 @@ def _load_json(path: Path) -> dict:
 # ─────────────────────────── payload for the swarm ───────────────────────────
 
 
+# Domain vocabulary that marks a mined citation as on-topic for AS-ALD / surface chemistry.
+# Layer-1 mining can return off-domain papers for a generic term (e.g. "termination" hit
+# pile-driving, quantum-loop verification, and theology papers); those pad the reference
+# list with nonsense. Curated anchors (seed + hypothesis provenance) are always kept; the
+# rest must match at least one of these to be cited.
+_CITATION_DOMAIN_TERMS = (
+    "atomic layer deposition", "area-selective", "area selective", "selective deposition",
+    "as-ald", "asd of", "(ald", "ald)", " ald ", "ald of", "thin film",
+    "passivat", "inhibitor", "precursor", "nucleation",
+    "self-assembled monolayer", "silane", "silanol", "siloxane", "chlorosilane",
+    "aminosilane", "silylamine", "silica", "silicon nitride", "silicon oxide",
+    "sio2", "si3n4", "sinx", "siox", "dielectric",
+    "hydroxylat", "amorphous silica", "amorphous silicon", "amorphous surface",
+    "adsorption energ", "molecular adsorption", "chemisorption", "physisorption",
+    "mace", "interatomic potential", "machine-learning potential",
+    "machine learning potential", "foundation model", "melt-quench", "melt quench",
+)
+
+
+def _is_on_domain(c: dict) -> bool:
+    text = " ".join(str(c.get(k, "")) for k in ("title", "venue", "abstract")).lower()
+    kws = c.get("keywords") or c.get("concepts") or []
+    if isinstance(kws, list):
+        text += " " + " ".join(str(k) for k in kws).lower()
+    return any(t in text for t in _CITATION_DOMAIN_TERMS)
+
+
 def _select_citations(citations: list[dict], hypothesis: dict, limit: int = 25) -> list[dict]:
-    """Curated anchors + hypothesis provenance first, then the rest, capped."""
+    """Curated anchors + hypothesis provenance first, then on-domain mined refs, capped.
+
+    Off-domain mined papers are dropped so the bibliography stays AS-ALD / surface-chemistry
+    (the earlier version padded to the cap with whatever was mined, incl. unrelated
+    'termination' hits)."""
     refs = set(hypothesis.get("provenance_refs", []))
     anchors = [c for c in citations
                if c.get("id") in refs or str(c.get("id", "")).startswith("seed_asald")]
     rest = [c for c in citations if c not in anchors]
+    on_domain = [c for c in rest if _is_on_domain(c)]
+    dropped = len(rest) - len(on_domain)
+    if dropped:
+        logger.info("citation filter: dropped %d off-domain mined reference(s)", dropped)
     seen, out = set(), []
-    for c in anchors + rest:
+    for c in anchors + on_domain:
         cid = c.get("id")
         if cid in seen:
             continue
