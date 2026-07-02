@@ -345,20 +345,27 @@ def stitch_paper(run_id: str, offline: bool = False) -> PaperResult:
                           screening=screening)
 
     hyp = rich.get("hypothesis", {})
-    campaign_txt = ""
+    gs = sections.latex_escape(hyp.get("growth_surface", ""))
+    ngs = sections.latex_escape(hyp.get("non_growth_surface", ""))
+    precursor = sections.latex_escape(hyp.get("precursor", ""))
+    film = sections.latex_escape(hyp.get("target_film", ""))
     if screening and screening.get("winner"):
-        n_pool = (screening.get("config") or {}).get("pool_size")
-        if n_pool:
-            campaign_txt = f" Selected from a {n_pool}-Candidate Screening Funnel"
-    title = (
-        "An Agentic In-Silico Co-Scientist for Area-Selective ALD: "
-        f"Fidelity-Gated Amorphous {sections.latex_escape(hyp.get('growth_surface', ''))}"
-        f"/{sections.latex_escape(hyp.get('non_growth_surface', ''))} Surfaces and "
-        f"Site-Matched {sections.latex_escape(hyp.get('inhibitor', ''))} Passivation "
-        f"for {sections.latex_escape(hyp.get('precursor', ''))}-Based "
-        f"{sections.latex_escape(hyp.get('target_film', ''))} Growth"
-        + campaign_txt
-    )
+        # Screening campaign: frame the paper around the two Challenge-4 deliverables
+        # (the amorphous surface builder + the agentic inhibitor screen), not one molecule.
+        n_scored = len([r for r in screening.get("rows", []) if r.get("S_mean") is not None])
+        n_pool = (screening.get("config") or {}).get("pool_size") or n_scored
+        title = (
+            "The Fidenz AI Co-scientist for Area-Selective ALD: A Fidelity-Gated "
+            f"Amorphous {gs}/{ngs} Surface Builder and an Agentic Screen of "
+            f"{n_pool} Inhibitor Candidates for {precursor}-Based {film} Growth"
+        )
+    else:
+        title = (
+            "An Agentic In-Silico Co-Scientist for Area-Selective ALD: "
+            f"Fidelity-Gated Amorphous {gs}/{ngs} Surfaces and Site-Matched "
+            f"{sections.latex_escape(hyp.get('inhibitor', ''))} Passivation for "
+            f"{precursor}-Based {film} Growth"
+        )
 
     filled = _TEMPLATE.read_text(encoding="utf-8")
     for key, val in {

@@ -59,12 +59,14 @@ class Settings(BaseSettings):
         default="funnel", alias="SCREENING_MODE", description="funnel | single"
     )
     screen_pool_size: int = Field(
-        default=20, alias="SCREEN_POOL_SIZE",
-        description="candidate pool size for the screening funnel (10-50)",
+        default=40, alias="SCREEN_POOL_SIZE",
+        description="candidate pool size for the screening funnel (10-50); the AI "
+                    "proposer fills the pool up to this size beyond the seed library",
     )
     screen_shortlist_m: int = Field(
-        default=8, alias="SCREEN_SHORTLIST_M",
-        description="candidates advancing from the Tier-0 prior rank to the MLIP batch",
+        default=10, alias="SCREEN_SHORTLIST_M",
+        description="candidates advancing from the Tier-0 prior rank to the MLIP batch "
+                    "(the funnel's 'top 10')",
     )
     screen_top_k: int = Field(
         default=3, alias="SCREEN_TOP_K",

@@ -115,8 +115,10 @@ SECTION_SPECS: list[tuple[str, str, int, str]] = [
 
 _SYSTEM_TEMPLATE = (
     "You are the '{title}' section-writer agent in a LangGraph swarm autonomously "
-    "authoring an IEEE journal manuscript (IEEEtran, two-column) for an in-silico "
-    "AI co-scientist study of area-selective atomic layer deposition.\n\n"
+    "authoring an IEEE journal manuscript (IEEEtran, two-column) for a study run with the "
+    "Fidenz AI Co-scientist (an autonomous in-silico co-scientist, by Pavan Kumar L and "
+    "Vinayak S) on area-selective atomic layer deposition. Refer to the system by name as "
+    "the 'Fidenz AI Co-scientist'.\n\n"
     "SECTION BRIEF: {brief}\n\n"
     "TARGET LENGTH: about {words} words of substantive technical prose. Long, "
     "detailed, publication-grade IEEE register -- no filler, no marketing.\n\n"

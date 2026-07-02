@@ -320,31 +320,62 @@ def slab_figure(run_dir: Path, rich: dict, out_path: Path) -> Path | None:
     return out_path
 
 
+def _ball_and_stick(atoms, ax, view: int = 0) -> None:
+    """Draw a 3D ball-and-stick of ``atoms`` on ``ax`` (bonds + depth-sorted CPK balls),
+    matching the interactive viewer's look. ``view`` 0 looks down z, 1 down y."""
+    import numpy as np
+    from ase.data import covalent_radii
+
+    pos = atoms.get_positions().astype(float)
+    pos = pos - pos.mean(axis=0)
+    Z = atoms.get_atomic_numbers()
+    syms = atoms.get_chemical_symbols()
+    if view == 0:                       # look down z
+        u, v, depth = pos[:, 0], pos[:, 1], pos[:, 2]
+    else:                               # orthogonal view: look down y
+        u, v, depth = pos[:, 0], pos[:, 2], pos[:, 1]
+
+    n = len(atoms)
+    # Bonds: atom pairs within ~1.15 x (sum of covalent radii). Gray sticks, behind atoms.
+    for i in range(n):
+        for j in range(i + 1, n):
+            d = float(np.linalg.norm(pos[i] - pos[j]))
+            if d < 1.15 * (covalent_radii[Z[i]] + covalent_radii[Z[j]]):
+                ax.plot([u[i], u[j]], [v[i], v[j]], color="#555555", lw=2.4,
+                        solid_capstyle="round", zorder=1)
+    # Atoms painted far-to-near so nearer atoms overlap correctly.
+    for zi, k in enumerate(np.argsort(depth)):
+        r = float(covalent_radii[Z[k]])
+        ax.scatter(u[k], v[k], s=max(45.0, (r * 60.0) ** 2),
+                   c=_ECOLOR.get(syms[k], "#B0B0B0"),
+                   edgecolors="#222222", linewidths=0.6, zorder=2 + zi)
+    ax.set_aspect("equal")
+    ax.set_axis_off()
+    pad = 1.1
+    ax.set_xlim(u.min() - pad, u.max() + pad)
+    ax.set_ylim(v.min() - pad, v.max() + pad)
+
+
 def molecule_figure(rich: dict, out_path: Path) -> Path | None:
-    """3D render of the inhibitor molecule (rdkit 2D fallback -> ase render)."""
+    """3D ball-and-stick render of the inhibitor molecule (rdkit 2D fallback)."""
     hyp = rich.get("hypothesis", {})
     name = rich.get("novel_compound", {}) or {}
     ident = name.get("smiles") or hyp.get("inhibitor")
     if not ident:
         return None
 
-    # Preferred: 3D conformer via the validation builder, rendered with ase.
+    # Preferred: 3D conformer via the validation builder, rendered ball-and-stick.
     try:
         plt = _plt()
-        from ase.visualize.plot import plot_atoms
-
         from ..validation.mlip import build_molecule
 
         atoms = build_molecule(ident)
-        fig, axes = plt.subplots(1, 2, figsize=(4.6, 2.3))
-        for ax, rot in zip(axes, ("0x,0y,0z", "-90x,0y,0z")):
-            plot_atoms(atoms, ax, radii=0.4, rotation=rot,
-                       colors=[_ECOLOR.get(s, "#B0B0B0")
-                               for s in atoms.get_chemical_symbols()])
-            ax.set_axis_off()
+        fig, axes = plt.subplots(1, 2, figsize=(4.6, 2.4))
+        for ax, view in zip(axes, (0, 1)):
+            _ball_and_stick(atoms, ax, view=view)
         fig.suptitle(f"Inhibitor: {hyp.get('inhibitor', ident)}", fontsize=9)
         fig.tight_layout()
-        fig.savefig(out_path)
+        fig.savefig(out_path, dpi=200)
         plt.close(fig)
         return out_path
     except Exception as exc:  # noqa: BLE001

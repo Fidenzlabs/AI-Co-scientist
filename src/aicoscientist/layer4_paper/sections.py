@@ -66,7 +66,11 @@ def bibliography(citations: list[dict]) -> str:
 # ──────────────────────────── architecture digest ────────────────────────────
 
 ARCH_DIGEST = (
-    "The co-scientist is a four-layer agentic funnel. Layer 1 (Deep Research Engine) is "
+    "The system is the Fidenz AI Co-scientist, an autonomous in-silico co-scientist for "
+    "area-selective ALD built by the authors (Pavan Kumar L and Vinayak S). Refer to it "
+    "by name as the 'Fidenz AI Co-scientist' throughout. "
+    "The Fidenz AI Co-scientist is a four-layer agentic funnel. Layer 1 (Deep Research "
+    "Engine) is "
     "a literature-mining swarm over arXiv/OpenAlex/Crossref/PubMed/Semantic Scholar, "
     "seeded with a hand-curated anchor set of AS-ALD citations with real DOIs; it "
     "populates a typed knowledge graph with site-resolved nodes (Surface, Inhibitor, "

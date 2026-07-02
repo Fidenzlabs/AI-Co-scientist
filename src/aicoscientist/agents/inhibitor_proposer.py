@@ -21,6 +21,7 @@ priors alone -- they must be validated on the real slabs (see ``surface_reactivi
 from __future__ import annotations
 
 import logging
+import re
 
 from pydantic import BaseModel, Field
 
@@ -87,16 +88,58 @@ class InhibitorProposer:
     ) -> list[ProposedInhibitor]:
         concept_names = concept_names or []
         existing = {s.lower() for s in (existing_names or set())}
+        out: list[ProposedInhibitor] = []
         if not self.offline:
             try:
-                return self._propose_llm(spec, concept_names, existing, n, citations or [])
+                out = self._propose_llm(spec, concept_names, existing, n, citations or [])
             except Exception as exc:  # noqa: BLE001
                 logger.warning("LLM proposer failed (%s); using offline generator", exc)
-        return self._propose_offline(spec, existing, n, citations or [])
+        if len(out) >= n:
+            return out[:n]
+        # Top up to n with the deterministic generator so the screening pool always fills
+        # even when the LLM returns fewer than requested (a single flash call often does).
+        seen = set(existing) | {c.name.lower() for c in out}
+        need = n - len(out)
+        if need > 0:
+            fill = self._propose_offline(spec, seen, need, citations or [])
+            if fill:
+                logger.info("proposer: LLM gave %d, topped up with %d generated candidate(s)",
+                            len(out), len(fill))
+            out.extend(fill)
+        return out[:n]
 
     # ──────────────────────── LLM path ────────────────────────
 
     def _propose_llm(self, spec, concept_names, existing, n, citations):
+        # A single flash call tends to return only a handful; loop, feeding back the
+        # accumulated names each round so the model keeps proposing NEW, diverse
+        # molecules until we have n (or hit the round budget). This is what lets the AI
+        # build a large candidate pool instead of contributing 2-3.
+        out: list[ProposedInhibitor] = []
+        seen = set(existing)
+        rounds = max(1, min(8, (n + 7) // 8))  # ~8 usable per round, capped
+        for r in range(rounds):
+            need = n - len(out)
+            if need <= 0:
+                break
+            batch = self._propose_llm_once(
+                spec, concept_names, seen, min(need + 4, 15), citations, round_i=r,
+            )
+            fresh = 0
+            for c in batch:
+                key = c.name.lower()
+                if key in seen:
+                    continue
+                seen.add(key)
+                out.append(c)
+                fresh += 1
+                if len(out) >= n:
+                    break
+            if fresh == 0:  # model stopped producing anything new -> stop looping
+                break
+        return out[:n]
+
+    def _propose_llm_once(self, spec, concept_names, existing, n, citations, round_i=0):
         from ..llm import structured_call
 
         system = (
@@ -178,8 +221,22 @@ class InhibitorProposer:
         return _validated(out)
 
 
+# Elements outside the SMILES organic subset (B,C,N,O,P,S,F,Cl,Br,I) must be bracketed.
+# The LLM frequently writes them bare (e.g. Si(C)(C)C), which rdkit rejects -- so valid
+# silane / high-k candidates (exactly the ETS/DMATMS class we want) get dropped. Repair
+# the common ones before giving up on a proposal.
+_NEEDS_BRACKETS = ("Si", "Al", "Ti", "Zr", "Hf", "Ge", "Sn", "Ga", "In")
+
+
+def _repair_smiles(s: str) -> str:
+    for el in _NEEDS_BRACKETS:
+        # bracket the bare element only when not already inside [...]
+        s = re.sub(rf"(?<!\[){el}(?!\])", f"[{el}]", s)
+    return s
+
+
 def _validated(candidates: list[ProposedInhibitor]) -> list[ProposedInhibitor]:
-    """Drop candidates whose SMILES rdkit cannot parse (when rdkit is available)."""
+    """Keep parseable SMILES; repair bare non-organic elements (Si->[Si]) before dropping."""
     try:
         from rdkit import Chem
     except Exception:  # noqa: BLE001 -- rdkit absent: accept as-is
@@ -187,6 +244,12 @@ def _validated(candidates: list[ProposedInhibitor]) -> list[ProposedInhibitor]:
     ok: list[ProposedInhibitor] = []
     for c in candidates:
         if Chem.MolFromSmiles(c.smiles) is not None:
+            ok.append(c)
+            continue
+        repaired = _repair_smiles(c.smiles)
+        if repaired != c.smiles and Chem.MolFromSmiles(repaired) is not None:
+            logger.info("repaired SMILES for %s: %s -> %s", c.name, c.smiles, repaired)
+            c.smiles = repaired
             ok.append(c)
         else:
             logger.info("dropping proposal with invalid SMILES: %s (%s)", c.name, c.smiles)
