@@ -125,6 +125,10 @@ class SurfaceReactivityValidator:
         # Persist slab geometries so Layer 4 can render atomic-model figures
         # (and so a judge can inspect the exact structures behind the numbers).
         self._dump_slabs(gs_surfaces + ngs_surfaces, datasets_dir)
+        # Persist molecules + a placed adsorption complex for the live 3D viewer.
+        self._dump_viz_structures(
+            mol_ident, precursor, ngs_pass[0] if ngs_pass else None, datasets_dir
+        )
 
         fidelity = {
             "growth_surface": ensemble_fidelity_summary(gs_surfaces),
@@ -430,6 +434,46 @@ class SurfaceReactivityValidator:
             except Exception as exc:  # noqa: BLE001
                 logger.warning("could not save slab %s (%s)", name, exc)
 
+    @staticmethod
+    def _dump_viz_structures(mol_ident, precursor_ident, ngs_surface, datasets_dir: Path) -> None:
+        """Write inhibitor/precursor molecules and a placed adsorption complex to
+        datasets/ so the Space's live 3D viewer can render them. Best-effort: any missing
+        piece (no rdkit, unparseable precursor name, Tier-0 with no real slab) is skipped."""
+        try:
+            from ase.io import write as ase_write
+        except Exception:  # noqa: BLE001 -- no ase; nothing to dump
+            return
+        datasets_dir.mkdir(parents=True, exist_ok=True)
+
+        from .mlip import build_molecule
+
+        inhibitor_atoms = None
+        for ident, fname in (
+            (mol_ident, "mol_inhibitor.xyz"),
+            (precursor_ident, "mol_precursor.xyz"),
+        ):
+            if not ident:
+                continue
+            try:
+                m = build_molecule(ident)
+                ase_write(datasets_dir / fname, m)
+                if fname == "mol_inhibitor.xyz":
+                    inhibitor_atoms = m
+            except Exception as exc:  # noqa: BLE001
+                logger.warning("could not save molecule '%s' (%s)", ident, exc)
+
+        if inhibitor_atoms is not None and ngs_surface is not None \
+                and getattr(ngs_surface, "atoms", None) is not None:
+            try:
+                from ase.build import add_adsorbate
+
+                slab = ngs_surface.atoms.copy()
+                xy = (slab.cell[0, 0] * 0.5, slab.cell[1, 1] * 0.5)
+                add_adsorbate(slab, inhibitor_atoms, height=2.2, position=xy)
+                ase_write(datasets_dir / "complex_ngs.extxyz", slab)
+            except Exception as exc:  # noqa: BLE001
+                logger.warning("could not save adsorption complex (%s)", exc)
+
     def _maybe_calculator(self, tier: int, settings):
         """Return (calc, engine_label). Falls back to Tier-0 on any import/setup error."""
         if tier < 1:
@@ -468,7 +512,10 @@ class SurfaceReactivityValidator:
         n_rot = getattr(settings, "adsorption_rotations", 4) if settings else 4
         heights = tuple(settings.adsorption_heights) if settings else (1.8, 2.4)
 
-        for s in surfaces:
+        from .progress import pbar
+
+        label = surfaces[0].material if surfaces else "surface"
+        for s in pbar(surfaces, desc=f"Surfaces [{label}] adsorption", total=len(surfaces)):
             dE = None
             if calc is not None and mol is not None and s.atoms is not None:
                 try:

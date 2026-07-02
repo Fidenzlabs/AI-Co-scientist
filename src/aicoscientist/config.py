@@ -78,6 +78,45 @@ class Settings(BaseSettings):
         alias="HYDROXYLATION_TARGET",
         description="override target site density (sites/nm^2); default = band-based",
     )
+    # Real MLIP-driven melt-quench amorphization (SLAB_SOURCE=md-amorphous, Tier>=1).
+    # Heat the slab's mobile region with the MLIP (MACE), hold to melt/disorder, quench on
+    # a temperature ramp, then relax to 0 K -> a genuinely amorphized network (vs the
+    # geometric 'amorphous' knob). Defaults follow the melt-quench-MD literature, adapted
+    # to a foundation MLIP on a GPU (see notes):
+    #   * NVT (fixed cell): uMLIPs give unphysically expanded densities under NPT because
+    #     their pressure/E-V response is poor -> NVT-quench is the recommended fix
+    #     (arXiv:2606.16385). For a vacuum slab NPT is inapplicable anyway.
+    #   * Melt T ~3500 K: a-SiO2 melt-quench uses ~4000 K (JPCC 2016); a-Si3N4 ~2500-5000 K
+    #     (arXiv:2408.05782) -> 3500 K is a single-value compromise (lower it toward 3000 K
+    #     for SiN-heavy stability, raise toward 4000 K for SiO2 fidelity).
+    #   * dt 0.5 fs: safer than 1 fs at melt T (Si3N4 MLIP studies use 0.25-1 fs).
+    #   * Quench fast is OK: a-Si3N4 RDF is insensitive to rate over 1e13-1e15 K/s
+    #     (arXiv:2408.05782); 8000 steps x 0.5 fs over ~3200 K ~ 8e14 K/s sits in that band.
+    # A high-T MD blow-up falls back to the geometric amorphizer, then the toy slab.
+    mq_melt_temperature_k: float = Field(default=3500.0, alias="MQ_MELT_TEMPERATURE_K")
+    mq_final_temperature_k: float = Field(default=300.0, alias="MQ_FINAL_TEMPERATURE_K")
+    mq_melt_steps: int = Field(default=3000, alias="MQ_MELT_STEPS")
+    mq_quench_steps: int = Field(default=8000, alias="MQ_QUENCH_STEPS")
+    mq_timestep_fs: float = Field(default=0.5, alias="MQ_TIMESTEP_FS")
+    mq_friction: float = Field(default=0.02, alias="MQ_FRICTION")
+    mq_fix_bottom_frac: float = Field(
+        default=0.4, alias="MQ_FIX_BOTTOM_FRAC",
+        description="freeze this bottom fraction as bulk anchor during melt-quench",
+    )
+    # LLM param-tuning agent for melt-quench: iterate melt T / quench steps on a small,
+    # cheap probe slab, scoring each by the fidelity gate + Si coordination quality, until
+    # the agent stops or the trial budget is spent. Tuned params are then reused for the
+    # full ensemble. Falls back to a deterministic heuristic if no LLM is available.
+    mq_autotune: bool = Field(default=False, alias="MQ_AUTOTUNE")
+    mq_autotune_trials: int = Field(default=4, alias="MQ_AUTOTUNE_TRIALS")
+    mq_autotune_probe_supercell: str = Field(
+        default="2,2", alias="MQ_AUTOTUNE_PROBE_SUPERCELL",
+        description="small supercell used only for the cheap tuning probes",
+    )
+    mq_autotune_probe_quench: int = Field(
+        default=1500, alias="MQ_AUTOTUNE_PROBE_QUENCH",
+        description="cap quench steps during probes to keep tuning fast",
+    )
     # Multi-site adsorption search (Phase 1)
     n_adsorption_sites: int = Field(default=4, alias="N_ADSORPTION_SITES")
     adsorption_rotations: int = Field(default=4, alias="ADSORPTION_ROTATIONS")

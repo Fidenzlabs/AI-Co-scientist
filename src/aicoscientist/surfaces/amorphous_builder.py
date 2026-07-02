@@ -216,6 +216,118 @@ def _amorphous_slab(key: str, target: float, seed: int, miller, supercell, cooli
     return atoms, provenance
 
 
+def _md_melt_quench(atoms, settings, seed: int, overrides=None):
+    """Real MLIP molecular-dynamics melt-quench of a crystalline slab's mobile region.
+
+    Uses the Tier-1 MACE calculator as the interatomic potential and ASE Langevin
+    dynamics: seed velocities at the melt temperature, hold to melt/disorder, quench down
+    a temperature ramp, then relax to a 0 K minimum. The bottom fraction is frozen as a
+    bulk anchor so the slab keeps a crystalline substrate and does not drift/evaporate.
+    ``overrides`` (from the LLM tuner) may set ``melt_temperature_k`` / ``quench_steps``.
+    Raises on NaN / instability so the caller can fall back to the geometric amorphizer.
+    """
+    import numpy as np
+    from ase import units
+    from ase.constraints import FixAtoms
+    from ase.md.langevin import Langevin
+    from ase.md.velocitydistribution import MaxwellBoltzmannDistribution
+    from ase.optimize import LBFGS
+
+    from ..validation.mlip import make_calculator
+
+    if settings is None:
+        from ..config import get_settings
+
+        settings = get_settings()
+    overrides = overrides or {}
+
+    calc = make_calculator(settings.mlip_model, settings.resolved_mlip_device)
+
+    atoms = atoms.copy()
+    z = atoms.get_positions()[:, 2]
+    cut = z.min() + settings.mq_fix_bottom_frac * (z.max() - z.min())
+    atoms.set_constraint(FixAtoms(mask=[zi < cut for zi in z]))
+    atoms.calc = calc
+
+    dt = settings.mq_timestep_fs * units.fs
+    t_melt = float(overrides.get("melt_temperature_k", settings.mq_melt_temperature_k))
+    t_final = float(settings.mq_final_temperature_k)
+    quench_steps = int(overrides.get("quench_steps", settings.mq_quench_steps))
+
+    from ..validation.progress import pbar
+
+    MaxwellBoltzmannDistribution(atoms, temperature_K=t_melt)
+    dyn = Langevin(atoms, dt, temperature_K=t_melt, friction=settings.mq_friction)
+
+    # 1) melt / equilibrate at the melt temperature
+    print(f"[melt-quench] melting {int(settings.mq_melt_steps)} steps @ {t_melt:.0f}K "
+          f"(dt={settings.mq_timestep_fs}fs, {len(atoms)} atoms)", flush=True)
+    dyn.run(int(settings.mq_melt_steps))
+
+    # 2) quench: step the thermostat setpoint from melt -> final over ~10 stages
+    n_stages = 10
+    per = max(1, quench_steps // n_stages)
+    print(f"[melt-quench] quenching {quench_steps} steps {t_melt:.0f}->{t_final:.0f}K",
+          flush=True)
+    for i in pbar(range(n_stages), desc="melt-quench quench", total=n_stages):
+        t_i = t_melt + (t_final - t_melt) * (i + 1) / n_stages
+        dyn.set_temperature(temperature_K=t_i)
+        dyn.run(per)
+
+    # 3) relax to a 0 K local minimum
+    print("[melt-quench] relaxing to 0 K minimum", flush=True)
+    LBFGS(atoms, logfile=None).run(fmax=0.1, steps=200)
+
+    pos = atoms.get_positions()
+    if not np.all(np.isfinite(pos)):
+        raise RuntimeError("melt-quench produced non-finite coordinates (unstable MD)")
+    atoms.set_constraint()  # clear the freeze before passivation
+    return atoms
+
+
+def _md_amorphous_slab(key: str, target: float, seed: int, miller, supercell, settings,
+                       overrides=None):
+    """Build a genuinely (MD) melt-quench amorphized, hydroxylated ASE slab (Tier >= 1).
+
+    Real crystalline bulk -> MLIP melt-quench MD -> Table-1 passivation + bridge anneal.
+    ``overrides`` (from the LLM tuner) may set ``melt_temperature_k`` / ``quench_steps``.
+    Returns ``(atoms, provenance)`` or raises so the caller can fall back.
+    """
+    import numpy as np
+
+    from .crystal_slabs import build_slab
+    from .hydroxylation import saturate_surface
+
+    if settings is None:
+        from ..config import get_settings
+
+        settings = get_settings()
+    overrides = overrides or {}
+
+    atoms, slab_prov = build_slab(key, miller_index=tuple(miller), supercell=tuple(supercell))
+    pos0 = atoms.get_positions().copy()
+    atoms = _md_melt_quench(atoms, settings, seed, overrides=overrides)
+
+    z = atoms.get_positions()[:, 2]
+    surf = z >= 0.5 * (z.min() + z.max())
+    rmsd = (
+        float(np.sqrt(np.mean(np.sum((atoms.get_positions()[surf] - pos0[surf]) ** 2, axis=1))))
+        if surf.any() else 0.0
+    )
+    atoms, sat = saturate_surface(atoms, key, target_density=target, seed=seed)
+    provenance = {
+        **slab_prov,
+        "source": "mlip-md-melt-quench",
+        "phase": f"md-amorphized-{slab_prov.get('phase', key)}",
+        "mq_melt_T_K": float(overrides.get("melt_temperature_k", settings.mq_melt_temperature_k)),
+        "mq_quench_steps": int(overrides.get("quench_steps", settings.mq_quench_steps)),
+        "mq_autotuned": bool(overrides),
+        "amorphization_rmsd_A": round(rmsd, 3),
+        **{f"cap_{k}": v for k, v in sat.items()},
+    }
+    return atoms, provenance
+
+
 def build_surface(
     material: str,
     target_density: Optional[float] = None,
@@ -273,7 +385,46 @@ def build_surface(
     descriptors: dict = {}
     provenance: dict = {"source": "tier0-numeric"}
     if compute_tier >= 1 and _HAVE_ASE:
-        if slab_source == "amorphous":
+        if slab_source in ("md-amorphous", "melt-quench"):
+            # Real MLIP melt-quench MD. On instability/blow-up, degrade gracefully to the
+            # cheap geometric amorphizer, then the toy slab -- never crash the pipeline.
+            mq_overrides = None
+            try:
+                from ..config import get_settings
+
+                _s = get_settings()
+                if getattr(_s, "mq_autotune", False):
+                    # LLM tuner picks melt_T/quench once per material (cached), reused here.
+                    from .param_tuner import tuned_overrides
+
+                    sig = (
+                        round(float(_s.mq_melt_temperature_k)),
+                        int(_s.mq_quench_steps),
+                        int(_s.mq_autotune_trials),
+                        str(_s.mq_autotune_probe_supercell),
+                        int(_s.mq_autotune_probe_quench),
+                        str(_s.mlip_model),
+                        str(_s.resolved_mlip_device),
+                    )
+                    mq_overrides = tuned_overrides(
+                        key, tuple(slab_miller), tuple(supercell), sig
+                    )
+            except Exception:  # noqa: BLE001 -- tuning is best-effort; use config defaults
+                mq_overrides = None
+            try:
+                atoms, provenance = _md_amorphous_slab(
+                    key, density, seed, slab_miller, supercell, None, overrides=mq_overrides
+                )
+            except Exception as exc:  # noqa: BLE001
+                try:
+                    atoms, provenance = _amorphous_slab(
+                        key, density, seed, slab_miller, supercell, cooling_rate
+                    )
+                    provenance["md_fallback_reason"] = str(exc)
+                except Exception as exc2:  # noqa: BLE001
+                    atoms = _build_atoms(key, n_sites, area_nm2, rng)
+                    provenance = {"source": "toy-fallback", "reason": f"{exc}; {exc2}"}
+        elif slab_source == "amorphous":
             try:
                 atoms, provenance = _amorphous_slab(
                     key, density, seed, slab_miller, supercell, cooling_rate
@@ -325,16 +476,20 @@ def build_ensemble(
     compute_tier: int = 0,
 ) -> list[Surface]:
     """Generate an ensemble of N independent gated slabs for one surface condition."""
-    return [
-        build_surface(
-            material,
-            target_density=target_density,
-            seed=seed0 + i,
-            cooling_rate=cooling_rate,
-            compute_tier=compute_tier,
+    from ..validation.progress import pbar
+
+    out = []
+    for i in pbar(range(n), desc=f"Build {material} slabs", total=n):
+        out.append(
+            build_surface(
+                material,
+                target_density=target_density,
+                seed=seed0 + i,
+                cooling_rate=cooling_rate,
+                compute_tier=compute_tier,
+            )
         )
-        for i in range(n)
-    ]
+    return out
 
 
 def ensemble_fidelity_summary(surfaces: list[Surface]) -> dict:

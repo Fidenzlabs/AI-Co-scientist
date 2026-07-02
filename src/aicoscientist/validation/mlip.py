@@ -14,9 +14,17 @@ Ref: MACE (github.com/ACEsuit/mace); barrier caveat arXiv:2502.15582.
 
 from __future__ import annotations
 
+from functools import lru_cache
 
+
+@lru_cache(maxsize=4)
 def make_calculator(kind: str = "mace-mp", device: str = "cpu"):
     """Return an ASE calculator.
+
+    Cached process-wide: a foundation-MLIP model is expensive to load (~100 MB weights)
+    and re-instantiating it per reflection iteration re-registers torch's precompile
+    mega-cache, which raises on the 2nd call. MACE/CHGNet calculators are reusable across
+    structures (attach via ``atoms.calc``), so one instance per (kind, device) is correct.
 
     * ``mace-mp``  -- MACE-MP medium, ungated/pip-installable (good default).
     * ``mace-mh1`` -- MACE-MH-1 (head='omat_pbe'); adds OC20 surface-adsorption and
@@ -194,6 +202,10 @@ def adsorption_energy_search(
     sites = reactive_sites(slab_r, material_key, n_sites=n_sites)
     configs: list[dict] = []
     best = None
+    from .progress import pbar
+
+    total = len(sites) * len(heights) * max(1, n_rot)
+    bar = pbar(desc=f"Adsorption search [{material_key}]", total=total)
     for si, site in enumerate(sites):
         for h in heights:
             for k in range(max(1, n_rot)):
@@ -204,6 +216,7 @@ def adsorption_energy_search(
                                                  steps=250)
                     dE = float(cx_r.get_potential_energy() - e_slab - e_mol)
                 except Exception:  # noqa: BLE001 -- skip pathological placements
+                    bar.update(1)
                     continue
                 ok = bool(conv and de_lo <= dE <= de_hi)
                 configs.append({"site": si, "height": h, "rot_deg": rot,
@@ -211,6 +224,9 @@ def adsorption_energy_search(
                                 "physical": ok})
                 if ok and (best is None or dE < best):
                     best = dE
+                bar.set_postfix_str(f"best dE={best:.3f} eV" if best is not None else "…")
+                bar.update(1)
+    bar.close()
     n_ok = sum(1 for c in configs if c["physical"])
     if best is None:
         # No converged, in-window config: fall back to the least-bad sampled value so
@@ -339,6 +355,14 @@ NAME_TO_SMILES: dict[str, str] = {
     "dimethylamino-trimethylsilane": "CN(C)[Si](C)(C)C",
     "ets": "CC[Si](O)(O)O",
     "ethyltrichlorosilane": "CC[Si](O)(O)O",
+    # ALD precursors (for the 3D viewer / any precursor-side modelling). Si/Cl embed via
+    # ETKDG fine; MMFF is skipped for exotic atoms so metal precursors (TMA/TDMAT) keep
+    # their embed geometry or are skipped gracefully if rdkit cannot embed them.
+    "bdeas": "[SiH2](N(CC)CC)N(CC)CC",
+    "dipas": "[SiH3]N(C(C)C)C(C)C",
+    "hcds": "Cl[Si](Cl)(Cl)[Si](Cl)(Cl)Cl",
+    "tdmat": "CN(C)[Ti](N(C)C)(N(C)C)N(C)C",
+    "tma": "C[Al](C)C",
 }
 
 

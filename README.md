@@ -1,3 +1,21 @@
+---
+title: AS-ALD Co-Scientist
+emoji: 🧪
+colorFrom: indigo
+colorTo: blue
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
+> **Running on Hugging Face:** this Space wraps the pipeline in a Gradio UI. Default is
+> Tier-0 (CPU, free `cpu-basic` hardware) in offline/mock mode — no key needed. Uncheck
+> offline and paste a Gemini AI Studio key for a real-LLM run. Tick **Tier-1** to use the
+> foundation-MLIP (MACE) reactivity engine; for that to be fast, upgrade the Space in
+> **Settings → Hardware** to a GPU (billed per hour) — on CPU hardware Tier-1 still runs
+> but slowly. The image ships CUDA-enabled torch, so GPU is used automatically when present.
+
+
 # AS-ALD Co-Scientist — Layers 1–4
 
 An autonomous in-silico co-scientist for **area-selective atomic layer deposition
