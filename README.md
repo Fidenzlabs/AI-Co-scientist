@@ -280,10 +280,37 @@ SCREEN_POOL_SIZE=30 SCREEN_SHORTLIST_M=10 SCREEN_TOP_K=3 \
 MLIP_DEVICE=cuda COMPUTE_TIER=1 aicoscientist-validate --run-id demo
 ```
 
-The novel-compound proposer (`USE_INHIBITOR_PROPOSER=true`) fills the pool with generative
-SMILES candidates (LLM with a key, deterministic combinatorial fallback offline), built with
-rdkit and tagged `ai-proposed`; the RSA steric-coverage cap (`USE_RSA_COVERAGE`, Tier ≥ 1)
-prevents bulky molecules from reaching an unphysical full monolayer.
+### The inhibitor-proposer agent
+
+`agents/inhibitor_proposer.py` — a ReAct-style **generative** agent that *invents new*
+small-molecule inhibitor candidates rather than only ranking a fixed library
+(`USE_INHIBITOR_PROPOSER=true`; `N_PROPOSED_INHIBITORS` and `SCREEN_POOL_SIZE` set how many
+it contributes). It reads the Layer-1 knowledge graph — mined mechanisms, functional-group ↔
+site rules, and prior verdicts — and emits each candidate on a fixed schema: `{name, smiles,
+functional_group, target_surface, expected_dE_range_eV, rationale, citations}`.
+
+- **Two interchangeable paths, one schema.** With an API key it asks the configured LLM for
+  chemically sensible novel candidates; **offline** (no key) a deterministic combinatorial
+  generator attaches known selective head groups (carboxylic / phosphonic / sulfonic acid,
+  primary amine, thiol) to volatile alkyl backbones (ethyl … hexyl, cyclohexyl) — **10
+  backbones × 5 head groups = up to 50** distinct keyless candidates, enough to fill the
+  largest pool. So the pipeline demonstrates *de novo* design with or without an LLM.
+- **SMILES repair + validation.** LLM SMILES are repaired (`Si → [Si]`, and Al/Ti/Zr/Hf/Ge/
+  Sn/Ga/In bracketed) and then **RDKit-validated**, so silane / high-k proposals survive while
+  chemically invalid valences are dropped rather than crashing the build.
+- **Site-resolved feedback in the closed loop.** In generational design (`SCREEN_GENERATIONS`
+  > 1) each failed batch's per-candidate energetics — ΔE on the non-growth vs growth surface,
+  chemisorb/physisorb regime, and a directive to *spare* the growth surface's –OH sites — are
+  fed back so the next generation targets the discriminating chemistry instead of re-proposing
+  near-duplicates.
+- **Evidence discipline.** Every proposed candidate is tagged `provenance='ai-proposed'` and
+  `extrapolated=True`, so it can never be reported "supported" on Tier-0 priors alone — it
+  **must** earn its ranking on the real MLIP-screened slabs. A reserved slice of the shortlist
+  (`SCREEN_RESERVE_NOVEL_FRAC`, default ½) guarantees novels reach the MLIP screen instead of
+  being buried by the prior rank.
+
+The RSA steric-coverage cap (`USE_RSA_COVERAGE`, Tier ≥ 1) then prevents bulky proposed
+molecules from reaching an unphysical full monolayer during scoring.
 
 ---
 
