@@ -1,5 +1,6 @@
 # AS-ALD Co-Scientist
 
+![Demo](./docs/demo.gif)
 An autonomous **in-silico AI co-scientist for area-selective atomic layer deposition
 (AS-ALD)**. It turns a surface-chemistry research idea into ranked, literature-grounded
 intervention hypotheses, lets a human commit one inhibitor/precursor scheme, **screens a
